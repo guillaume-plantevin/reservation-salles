@@ -8,4 +8,18 @@
         alors l’utilisateur devient connecté 
         et une (ou plusieurs) variables de session sont créées.
     */
+    $title = 'connexion';
 ?>
+<!DOCTYPE html>
+<html lang="fr">
+    <?php require_once('templates/head.php') ?>
+    <body class='container'>
+        <?php require_once('templates/header.php') ?>
+        <main class="container">
+        <h1>Connexion</h1>
+        
+        </main>
+        <?php require_once('templates/footer.php') ?>
+        
+    </body>
+</html>

@@ -8,4 +8,18 @@
         (ex : http://localhost/reservationsalles/evenement/?id=1​) 
         Seuls les personnes connectées peuvent accéder aux événements.
     */
+    $title = 'réservation';
 ?>
+<!DOCTYPE html>
+<html lang="fr">
+    <?php require_once('templates/head.php') ?>
+    <body class="container">
+        <?php require_once('templates/header.php') ?>
+        <main>
+        <h1>Réservation</h1>
+        
+        </main>
+        <?php require_once('templates/footer.php') ?>
+        
+    </body>
+</html>
