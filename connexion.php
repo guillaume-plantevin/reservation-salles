@@ -13,7 +13,7 @@
 <!DOCTYPE html>
 <html lang="fr">
     <?php require_once('templates/head.php') ?>
-    <body>
+    <body class='container'>
         <?php require_once('templates/header.php') ?>
         <main class="container">
         <h1>Connexion</h1>
