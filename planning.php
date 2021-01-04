@@ -11,4 +11,18 @@
         Les réservations se font du lundi au vendredi et de 8h et 19h. 
         Les créneaux ont une durée fixe d’une heure.
     */
+    $title = 'planning';
 ?>
+<!DOCTYPE html>
+<html lang="fr">
+    <?php require_once('templates/head.php') ?>
+    <body>
+        <?php require_once('templates/header.php') ?>
+        <main>
+        <h1>Planning</h1>
+        
+        </main>
+        <?php require_once('templates/footer.php') ?>
+        
+    </body>
+</html>
