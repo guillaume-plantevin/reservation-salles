@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html lang="fr">
     <?php require_once('templates/head.php') ?>
-    <body>
+    <body class="container">
         <?php require_once('templates/header.php') ?>
         <main>
         <h1>Le Laptop & Breakfast</h1>
