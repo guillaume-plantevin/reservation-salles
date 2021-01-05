@@ -78,17 +78,15 @@
                     
                     // sanitizing input query
                     $stmt = $pdo->prepare($rgt);
-        
+                    // ADDED TRIM()
                     $stmt->execute([
-                        ':login' => htmlentities($_POST['login']), 
-                        ':password' => password_hash( htmlentities( $_POST['password']), PASSWORD_DEFAULT)
+                        ':login' => htmlentities( trim($_POST['login']) ), 
+                        ':password' => password_hash( htmlentities( trim($_POST['password']) ), PASSWORD_DEFAULT)
                     ]);
     
                     $_SESSION['success'] = 'Votre profil a été créé avec succès!';
                     // GOTO
-                    // header('Location: connexion.php');
-                    header('Location: inscription.php');
-
+                    header('Location: connexion.php');
                     return;
                 }
             }

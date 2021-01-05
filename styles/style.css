@@ -5,8 +5,8 @@ header li {
 }
 header a {
 	text-decoration: none;
-	background-color: rgb(18, 231, 36);
-	color: white;
+	background-color: rgb(255, 227, 71);
+	color: rgb(9, 172, 58);
 	padding: .5em .7em;
 }
 
@@ -14,10 +14,11 @@ header a {
 
 /* ===================== FOOTER =========================== */
 .footer {
-  position: fixed;
+  /* pose un problème */
+  /* position: fixed;
   left: 0;
   bottom: 0;
-  right: 0;
+  right: 0; */
   /* width: 100%; */
   /* background: rgb(255, 197, 146); */
   /* color: rgb(2, 2, 2); */
