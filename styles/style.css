@@ -35,6 +35,10 @@ label {
 	margin-bottom: 1em;
 	margin-top: 1em;
 }
+input[type=submit] {
+  /* color:red; */
+  margin: 1em .5em;
+}
 /* ===================== MSG FOR USERS =========================== */
 .error {
   width: 50%;

@@ -17,34 +17,59 @@
 
 
     if ( isset($_POST['cancel']) ) {
-        header('Location: reservation-form.php');
+        header('Location: deconnexion.php');
         return;
     }
     if ( isset($_POST['submit'])) {
+        // NO TITLE
         if (empty($_POST['title'])) {
             $_SESSION['error'] = 'Vous devez entrer un titre pour votre réservation.';
             header('Location: reservation-form.php');
             return;
         }
+        // NO DATE
         elseif (empty($_POST['date'])) {
             $_SESSION['error'] = 'Vous devez choisir un jour pour votre réservation.';
             header('Location: reservation-form.php');
             return;
         }
+        // NO STARTING TIME
         elseif (empty($_POST['startTime'])) {
             $_SESSION['error'] = 'Vous devez choisir une heure de début pour votre réservation.';
             header('Location: reservation-form.php');
             return;
         }
+        // NO ENDING TIME
         elseif (empty($_POST['endTime'])) {
             $_SESSION['error'] = 'Vous devez choisir une heure de fin pour votre réservation.';
             header('Location: reservation-form.php');
             return;
         }
+        // NO DESCRIPTION
         elseif (empty($_POST['description'])) {
             $_SESSION['error'] = 'Vous devez écrire une description pour votre réservation.';
             header('Location: reservation-form.php');
             return;
+        }
+        // OK, CONTINUE
+        else {
+            /*
+            $insert = "INSERT INTO reservations 
+                    (titre, description, debut, fin, id_utilisateur) 
+                    VALUES (:title, :description, :debut, :fin, :id_user)";
+            echo $insert. '<br>';
+            $stmt = $pdo->prepare($insert);
+
+            $dateStart = 
+            $dateEnd = 
+            $stmt->execute([
+                :title=> htmlentities($_POST['title']),
+                :description=> htmlentities($_POST['description']), 
+                :debut=> , 
+                :fin=> , 
+                :id_user=> 
+            ]);
+            */
         }
     }
 ?>
@@ -70,6 +95,12 @@
                 else :
             ?>
             <!-- à envoyer en POST, car le descriptif peut-être long... -->
+            <p>
+                Attention: Les réservations ne se font que par heures complètes, 
+                par exemple 16:00 et non pas 16:30. 
+                Si vous choisissez une heure de début ou de fin ne respectant pas ce format, 
+                votre réservation ne pourra pas être validée.
+            </p>
             <form method="POST">
                 <label for="title">Titre:</label>
                 <input type="text" name="title" id="title" placeholder="Entrez votre titre ici"/><br />
@@ -99,12 +130,13 @@
                 <input type="time" id="timeEnd" name="endTime" min="09:00" max="20:00" /> <br />
 
 
-                <label for="description">Desciption:</label>
-                <textarea name="description" id="description" cols="30" rows="10" maxlength="65535"></textarea/><br />
+                <label for="description">Desciption:</label> <br />
+                <textarea name="description" id="description" cols="33" rows="10" maxlength="65535"></textarea/><br />
                 
 
+                <input type="submit" name='cancel' value="annuler">
+                <input type="reset" name='reset' value="Réinitialiser">
                 <input type="submit" name='submit' value="Valider">
-                <input type="submit" name='cancel' value="Annuler">
             </form>
             <?php
                 endif;
