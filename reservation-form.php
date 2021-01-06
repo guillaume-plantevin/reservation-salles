@@ -53,8 +53,14 @@
         }
         // OK, CONTINUE
         else {
+            $dateArray = explode('-', $_POST['date']);
             $startTimeArray = explode(':', $_POST['startTime']);
             $endTimeArray = explode(':', $_POST['endTime']);
+
+            // DEBUG
+            var_dump_pre($dateArray, '61: $dateArray');
+            var_dump_pre($startTimeArray, '62: $startTimeArray');
+            var_dump_pre($endTimeArray, '63: $endTimeArray');
             
             // IF ANTEDATE
             if ($endTimeArray[0] <= $startTimeArray[0]) {
@@ -62,11 +68,27 @@
                 header('Location: reservation-form.php');
                 return;
             }
+            // USER INPUTS MINUTES OTHER THAN 00
             elseif ($endTimeArray[1] != '00' || $startTimeArray[1] != '00') {
                 // CHANGER LE MSG , TOUT DE MEME...
                 $_SESSION['error'] = 'Vous ne lisez pas ce que je vous écris, car vous êtes un con. <br />PAS DE MINUTES!';
                 header('Location: reservation-form.php');
                 return;
+            }
+            else {
+                $timestampNow = time();
+                $dateTime = $_POST['date'] . ' ' .$_POST['startTime'] . ':00';
+                $resDateTime = strtotime($dateTime);
+
+                // DEBUG
+                print_r_pre($timestampNow, '77: $timestampNow: ');
+                var_dump_pre($resDateTime, '88: $resDateTime');
+
+                if ($resDateTime <= $timestampNow) {
+                    $_SESSION['error'] = 'Vous avez fait une réservation dans le passé. Merci de faire les corrections nécessaires.';
+                    header('Location: reservation-form.php');
+                    return;
+                }
             }
             // echo date();
 
