@@ -54,8 +54,11 @@
         // OK, CONTINUE
         else {
             $dateArray = explode('-', $_POST['date']);
+            $dateFormatted =implode('/',$dateArray);
             $startTimeArray = explode(':', $_POST['startTime']);
             $endTimeArray = explode(':', $_POST['endTime']);
+
+            // echo date('D/m/y', $dateFormatted);
 
             // DEBUG
             var_dump_pre($dateArray, '61: $dateArray');
@@ -64,14 +67,15 @@
             
             // IF ANTEDATE
             if ($endTimeArray[0] <= $startTimeArray[0]) {
-                $_SESSION['error'] = 'L\'heure de fin de votre réservation n\'est pas valide. Merci de faire les corrections nécessaires.';
+                $_SESSION['error'] = 'L\'heure de fin de votre réservation n\'est pas valide. 
+                                    Merci de faire les corrections nécessaires.';
                 header('Location: reservation-form.php');
                 return;
             }
             // USER INPUTS MINUTES OTHER THAN 00
             elseif ($endTimeArray[1] != '00' || $startTimeArray[1] != '00') {
                 // CHANGER LE MSG , TOUT DE MEME...
-                $_SESSION['error'] = 'Vous ne lisez pas ce que je vous écris, car vous êtes un con. <br />PAS DE MINUTES!';
+                $_SESSION['error'] = 'Vous ne pouvez pas utiliser de minutes';
                 header('Location: reservation-form.php');
                 return;
             }
@@ -82,10 +86,12 @@
 
                 // DEBUG
                 print_r_pre($timestampNow, '77: $timestampNow: ');
-                var_dump_pre($resDateTime, '88: $resDateTime');
+                var_dump_pre($resDateTime, '88: $resDateTime: ');
 
+                // CHOOSING TO START IN THE PAST
                 if ($resDateTime <= $timestampNow) {
-                    $_SESSION['error'] = 'Vous avez fait une réservation dans le passé. Merci de faire les corrections nécessaires.';
+                    $_SESSION['error'] = 'Vous avez fait une réservation dans le passé. 
+                                        Merci de faire les corrections nécessaires.';
                     header('Location: reservation-form.php');
                     return;
                 }
@@ -142,8 +148,8 @@
             ?>
             <!-- à envoyer en POST, car le descriptif peut-être long... -->
             <p>
-                Attention: Les réservations ne se font que par heures complètes, 
-                par exemple 16:00 et non pas 16:30. 
+                Attention: Les réservations ne se font que par heures rondes, 
+                par exemple 16:00 et non pas 16:30 ou 16:59. 
                 Si vous choisissez une heure de début ou de fin ne respectant pas ce format, 
                 votre réservation ne pourra pas être validée.
             </p>

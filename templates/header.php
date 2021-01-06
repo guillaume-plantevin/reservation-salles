@@ -1,4 +1,6 @@
 <header>
+    <div id='logo'>
+    </div>
     <ul>
         <li><a href="index.php">Acceuil</a></li>
         <li><a href="inscription.php">Inscription</a></li>
