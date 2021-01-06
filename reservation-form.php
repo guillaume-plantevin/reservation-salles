@@ -53,23 +53,28 @@
         }
         // OK, CONTINUE
         else {
-            /*
             $insert = "INSERT INTO reservations 
                     (titre, description, debut, fin, id_utilisateur) 
                     VALUES (:title, :description, :debut, :fin, :id_user)";
+
+            // DEBUG
             echo $insert. '<br>';
+            
             $stmt = $pdo->prepare($insert);
 
-            $dateStart = 
-            $dateEnd = 
+            $dateStart = $_POST['date'] . ' ' . $_POST['startTime'] . ':00';
+            $dateEnd = $_POST['date'] . ' ' . $_POST['endTime'] . ':00';
+
             $stmt->execute([
-                :title=> htmlentities($_POST['title']),
-                :description=> htmlentities($_POST['description']), 
-                :debut=> , 
-                :fin=> , 
-                :id_user=> 
+                ':title'=> htmlentities($_POST['title']),
+                ':description'=> htmlentities($_POST['description']), 
+                ':debut'=> $dateStart, 
+                ':fin'=> $dateEnd, 
+                ':id_user'=> $_SESSION['id']
             ]);
-            */
+
+            $_SESSION['success']= 'Votre réservation a bien été enregistré. Vous pouvez dès maintenant la voir sur le planning.';
+            
         }
     }
 ?>

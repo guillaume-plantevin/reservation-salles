@@ -5,11 +5,16 @@ header li {
 }
 header a {
 	text-decoration: none;
-	background-color: rgb(255, 227, 71);
-	color: rgb(9, 172, 58);
+	background-color: black;
+	color:white;
 	padding: .5em .7em;
 }
-
+header a:hover {
+	/* text-decoration: none;
+	background-color: black; */
+	color:red;
+	/* padding: .5em .7em; */
+}
 
 
 /* ===================== FOOTER =========================== */
