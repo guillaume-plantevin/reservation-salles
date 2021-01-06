@@ -53,6 +53,24 @@
         }
         // OK, CONTINUE
         else {
+            $startTimeArray = explode(':', $_POST['startTime']);
+            $endTimeArray = explode(':', $_POST['endTime']);
+            
+            // IF ANTEDATE
+            if ($endTimeArray[0] <= $startTimeArray[0]) {
+                $_SESSION['error'] = 'L\'heure de fin de votre réservation n\'est pas valide. Merci de faire les corrections nécessaires.';
+                header('Location: reservation-form.php');
+                return;
+            }
+            elseif ($endTimeArray[1] != '00' || $startTimeArray[1] != '00') {
+                // CHANGER LE MSG , TOUT DE MEME...
+                $_SESSION['error'] = 'Vous ne lisez pas ce que je vous écris, car vous êtes un con. <br />PAS DE MINUTES!';
+                header('Location: reservation-form.php');
+                return;
+            }
+            // echo date();
+
+            /*
             $insert = "INSERT INTO reservations 
                     (titre, description, debut, fin, id_utilisateur) 
                     VALUES (:title, :description, :debut, :fin, :id_user)";
@@ -72,8 +90,9 @@
                 ':fin'=> $dateEnd, 
                 ':id_user'=> $_SESSION['id']
             ]);
+            */
 
-            $_SESSION['success']= 'Votre réservation a bien été enregistré. Vous pouvez dès maintenant la voir sur le planning.';
+            // $_SESSION['success']= 'Votre réservation a bien été enregistré. Vous pouvez dès maintenant la voir sur le planning.';
             
         }
     }
@@ -110,34 +129,17 @@
                 <label for="title">Titre:</label>
                 <input type="text" name="title" id="title" placeholder="Entrez votre titre ici"/><br />
 
-                <!-- <label for="datetime">datetime:</label>
-                <input type="datetime" name="datetime" id="datetime"/><br />
-                
-                <label for="dtLocal">datetime-local:</label>
-                <input type="datetime-local" name="dtLocal" id="dtLocal"/><br /> -->
-
                 <label for="date">date:</label>
                 <input type="date" name="date" id="date"/><br />
 
-                <label for="timeStart">
-                    heure de début:<br />
-                    <small>de 8:00 à 19:00</small>
-                </label>
-                <!-- <small>de 8:00 à 19:00</small> -->
+                <label for="timeStart">heure de début:<br /><small>de 8:00 à 19:00</small></label>
                 <input type="time" id="timeStart" name="startTime" min="08:00" max="19:00" /><br />
 
-
-                <label for="timeEnd">
-                    heure de fin:<br />
-                        <small>de 9:00 à 20:00</small>
-                </label>    
-                <!-- <small>Office hours are 9am to 6pm</small> -->
+                <label for="timeEnd">heure de fin:<br /><small>de 9:00 à 20:00</small></label>    
                 <input type="time" id="timeEnd" name="endTime" min="09:00" max="20:00" /> <br />
-
 
                 <label for="description">Desciption:</label> <br />
                 <textarea name="description" id="description" cols="33" rows="10" maxlength="65535"></textarea/><br />
-                
 
                 <input type="submit" name='cancel' value="annuler">
                 <input type="reset" name='reset' value="Réinitialiser">
