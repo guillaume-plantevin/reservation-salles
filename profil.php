@@ -98,7 +98,7 @@
 					unset($_SESSION['success']);
 				}
                 if (!isset($_SESSION['logged']) || !$_SESSION['logged']) :
-                    echo '<p class="error">Cette partie du site où vous pourrez modifier vos informations, ne sera visible qu\'une fois connecté</p>';
+                    echo '<p class="error">Cette partie du site où vous pourrez modifier vos informations, ne sera visible qu\'une fois connecté.</p>';
                 else :
             ?>
                 <p>Ici, vous pouvez changer votre identifiant - s'il est disponible - et/ou votre mot de passe:</p>

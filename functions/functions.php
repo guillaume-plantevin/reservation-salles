@@ -17,3 +17,17 @@
         $return = 'rgb(' . $r . ', ' . $g . ', ' . $b . ')';
         return $return;
     }
+    function br($input) {
+        $output = '';
+        for ($i = 0; $i < $input; ++$i) {
+            $output .= '<br />';
+        }
+        return $output;
+    }
+    function breakingLine() {
+        $output = '';
+        $output .= '<br>';
+        $output .= '===================================================';
+        $output .= '<br>';
+        return $output;
+    }
