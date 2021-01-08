@@ -11,7 +11,22 @@
         Les réservations se font du lundi au vendredi et de 8h et 19h. 
         Les créneaux ont une durée fixe d’une heure.
     */
+
+    require_once('pdo.php');
+    require_once('functions/functions.php');
+
     $title = 'planning';
+
+    date_default_timezone_set('Europe/Paris');
+
+    $script_tz = date_default_timezone_get();
+
+
+    if (strcmp($script_tz, ini_get('date.timezone'))){
+        echo 'Script timezone differs from ini-set timezone.';
+    } else {
+        echo 'Script timezone and ini-set timezone match.';
+    }
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -50,7 +65,12 @@
                 </tr>
                 <tr>
                     <th class="hours">9:00</th>
-                    <td></td>
+                    <td>
+                        <form action="reservation.php" method="GET">
+                            <input type="hidden" name="id" value='' />
+                            <input type="submit" value='détails' />
+                        </form>
+                    </td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -128,15 +148,6 @@
                     <td></td>
                     <td></td>
                 </tr>
-                <tr>
-                    <th class="hours">19:00</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-
             </tbody>
         </table>
         
