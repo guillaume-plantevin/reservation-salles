@@ -1,0 +1,35 @@
+.connerie {
+    height: 100px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: baseline;
+    /* background-color: red; */
+}
+h1 {
+    color: lightseagreen;
+}
+/* table th td{
+    border: 2px solid rgb(122, 122, 122);
+} */
+.calendar__table {
+    width: 100%;
+    height: calc(100vh - 120px);
+}   
+.calendar__table th, .calendar__table td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    vertical-align: top;
+    width: 14.29%;
+}
+.calendar__weekday {
+    font-weight: bold;
+    color: black;
+    font-size: 1.2em;
+}
+.calendar__day {
+    font-size: 1.3em;
+}
+/* To use or not */
+.calendar__othermonth .calendar__day{
+    opacity: .3;
+}

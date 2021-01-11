@@ -68,6 +68,7 @@ input[type=submit] {
 /* ===================== PLANNING-TABLE =========================== */
 table, td, th {
   border: 1px solid black;
+  padding: 2em
 }
 col {
   width: 150px;
