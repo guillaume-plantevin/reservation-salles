@@ -12,8 +12,9 @@
         Les créneaux ont une durée fixe d’une heure.
     */
 
-    require_once('pdo.php');
     require_once('functions/functions.php');
+    require_once('pdo.php');
+    require_once('class/week.php');
 
     $title = 'planning';
 
@@ -31,7 +32,7 @@
 <!DOCTYPE html>
 <html lang="fr">
     <?php require_once('templates/head.php') ?>
-    <body class="container">
+    <body>
         <?php require_once('templates/header.php') ?>
         <main>
         <h1>Planning</h1>
