@@ -18,16 +18,21 @@
 
     $title = 'planning';
 
-    date_default_timezone_set('Europe/Paris');
+    // date_default_timezone_set('Europe/Paris');
 
-    $script_tz = date_default_timezone_get();
+    // $script_tz = date_default_timezone_get();
+    // if (strcmp($script_tz, ini_get('date.timezone'))){
+    //     echo 'Script timezone differs from ini-set timezone.';
+    // } else {
+    //     echo 'Script timezone and ini-set timezone match.';
+    // }
+
+    $activeWeek = new Week();
+    echo '<br />';
+    $test = (clone $activeWeek)->getMonday();
+    var_dump_pre($test, '33: $test');
 
 
-    if (strcmp($script_tz, ini_get('date.timezone'))){
-        echo 'Script timezone differs from ini-set timezone.';
-    } else {
-        echo 'Script timezone and ini-set timezone match.';
-    }
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -47,7 +52,8 @@
             </colgroup>
             <thead>
                 <tr>
-                    <th>MOIS</th>
+                    <th><?= $activeWeek->getMonth(); ?>
+                    </th>
                     <th class="days">Lundi</th>
                     <th class="days">Mardi</th>
                     <th class="days">Mercredi</th>
