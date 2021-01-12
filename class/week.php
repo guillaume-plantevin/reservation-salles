@@ -3,15 +3,19 @@
         public $days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
         public $months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
         
-        public $currentDay;
-        public $currentDayString;
+        // BOOL
         public $currentIsMonday;
+        // STRING
+        public $currentDayString;
+        public $monthString;
+        // INT
+        public $currentDay;
         public $currentDate;
         public $mondaysDate;
         public $day;
         public $month;
-        public $monthString;
         public $year;
+
 
         /**
          * week constructor: initialise tous les attributs
@@ -75,9 +79,11 @@
         public function nextWeek(): Week {
             $temp = new DateTimeImmutable($this->currentDate);
             $temp2 = $temp->modify('next monday');
+
             $day = $temp2->format('j');
             $month = $temp2->format('n');
             $year = $temp2->format('Y');
+
             return new Week($day, $month, $year);
         }
 
@@ -88,9 +94,19 @@
         public function previousWeek(): Week {
             $temp = new DateTimeImmutable($this->currentDate);
             $temp2 = $temp->modify('previous monday');
+
             $day = $temp2->format('j');
             $month = $temp2->format('n');
             $year = $temp2->format('Y');
+
             return new Week($day, $month, $year);
+        }
+
+        /**
+         * retourne un objet DateTime pour faire la recherche d'événements
+         * @return DateTime
+         */
+        public function getStartingDay(): DateTime {
+            return new DateTime("{$this->year}-{$this->month}-{$this->mondaysDate}");
         }
     }

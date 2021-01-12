@@ -17,12 +17,29 @@
     require_once('functions/functions.php');
     require_once('pdo.php');
     require_once('class/week.php');
+    require_once('class/events.php');
 
     date_default_timezone_set ('Europe/Paris');
 
     $title = 'planning';
-    $actWeek = new Week($_GET['day'] ?? null, $_GET['month'] ?? null, $_GET['year'] ?? null);
 
+    $eventsFromDB = new Events();
+
+    $actWeek = new Week($_GET['day'] ?? null, $_GET['month'] ?? null, $_GET['year'] ?? null);
+    $start = $actWeek->getStartingDay();
+    var_dump_pre($start, '$start');
+    // SHOULD INCLUDE THE WEEK-END?
+    // IF SO, I SHOULD INPUT '+7 days - 1 second'
+    $end = (clone $start)->modify('+ 5 days - 1 second');
+    var_dump_pre($end, '$end');
+    $events = $eventsFromDB->getEventsBetween($start, $end);
+    var_dump_pre($events, '$events');
+    
+    
+    
+    
+    
+    // die();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
