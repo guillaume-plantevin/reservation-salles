@@ -3,7 +3,6 @@
     display: flex;
     justify-content: space-evenly;
     align-items: baseline;
-    /* background-color: red; */
 }
 /* h1 {
     color: lightseagreen;
@@ -13,7 +12,8 @@
 } */
 .calendar__table {
     width: 100%;
-    height: calc(100vh - 120px);
+    /* height: calc(100vh - 120px); */
+    height: 110vh;
 }   
 .calendar__table th, .calendar__table td {
     padding: 10px;
@@ -22,13 +22,15 @@
     /* width: 14.29%; */
     width: 11%;
 }
+.calendar__table tr {
+    height: 3em;
+}
 .calendar__weekday {
     font-weight: bold;
     color: black;
     font-size: 1.2em;
 }
 .calendar__weekend {
-    /* background-color: red; */
     width: 10px;
 }
 .calendar__day {
@@ -38,6 +40,3 @@
 .calendar__othermonth .calendar__day{
     opacity: .3;
 }
-
-/* .calendar__hour {    
-} */

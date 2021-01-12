@@ -16,31 +16,13 @@
     // ?day=22&month=02&year=2021
     require_once('functions/functions.php');
     require_once('pdo.php');
-    // require_once('class/week.php');
-    require_once('class/week2.php');
+    require_once('class/week.php');
 
     date_default_timezone_set ('Europe/Paris');
 
     $title = 'planning';
     $actWeek = new Week($_GET['day'] ?? null, $_GET['month'] ?? null, $_GET['year'] ?? null);
 
-    // DEBUG
-    var_dump_pre($actWeek->nextWeek(), '$actWeek->nextWeek()');
-
-    // var_dump_pre($actWeek, '$actWeek');
-    // $startingDayWeek = $actWeek->getMonday();
-    // var_dump_pre($startingDayWeek, 'startingDayWeek');
-
-    // $start = $month->getStartingDay();
-    // $start = $start->format('N') === '1' ? $start : $month->getStartingDay()->modify('last monday');
-
-    // $activeDay = new DateTime('now');
-    // $presentDay = $activeDay->format('d');
-    // var_dump($presentDay);
-    // var_dump($start);
-
-    // $test = (clone $activeWeek)->getMonday();
-    // var_dump_pre($test, '33: $test');
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -71,7 +53,7 @@
             </tr>
             <?php for ($i = 0; $i < 11; ++$i): ?> 
                 <tr>
-                    <th><?=$i+8 . ':00'; ?></th>
+                    <th><?= $i + 8 . ':00'; ?></th>
                     <?php for ($j = 0; $j < 7; ++$j): ?>
                         <td>...</td>
                     <?php endfor; ?>
