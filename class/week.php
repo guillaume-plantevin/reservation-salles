@@ -72,7 +72,7 @@
          * renvoie la semaine suivante
          * @return Week
          */
-        public function nextWeek() {
+        public function nextWeek(): Week {
             $temp = new DateTimeImmutable($this->currentDate);
             $temp2 = $temp->modify('next monday');
             $day = $temp2->format('j');
