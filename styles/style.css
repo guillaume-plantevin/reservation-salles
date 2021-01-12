@@ -5,14 +5,14 @@ header li {
 }
 header a {
 	text-decoration: none;
-	background-color: black;
+	background-color: rgba(0, 0, 0, 0.548);
 	color:white;
 	padding: .5em .7em;
 }
 header a:hover {
-	/* text-decoration: none;
-	background-color: black; */
-	color:red;
+	/* text-decoration: none; */
+	background-color: rgba(0, 0, 0, 0.137);
+	/* color:red; */
 	/* padding: .5em .7em; */
 }
 #logo {

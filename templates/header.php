@@ -1,7 +1,7 @@
 <header>
     <div id='logo'>
     </div>
-    <ul>
+    <ul class="d-flex flex-row align-items-center justify-content-between">
         <li><a href="index.php">Acceuil</a></li>
         <li><a href="inscription.php">Inscription</a></li>
         <li><a href="connexion.php">connexion</a></li>
