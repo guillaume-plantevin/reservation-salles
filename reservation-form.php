@@ -5,6 +5,10 @@
             titre, description, date de début, date de fin.
     */
     session_start();
+    
+    // DEBUG
+    $one = '<br />';
+    $two = $one . $one;
 
     require_once('pdo.php');
     require_once('functions/functions.php');
@@ -12,8 +16,10 @@
     $title = 'réservation: formulaire';
 
     // DEBUG
-    print_r_pre($_SESSION, '15: $_SESSION:');
-    print_r_pre($_POST, '16: $_POST:');
+    print_r_pre($_SESSION, '18: $_SESSION:');
+    echo breakingLine();
+    print_r_pre($_POST, '20: $_POST:');
+    echo breakingLine();
 
 
     if ( isset($_POST['cancel']) ) {
@@ -54,24 +60,29 @@
         // OK, CONTINUE
         else {
             $dateArray = explode('-', $_POST['date']);
+            $dateFormatted =implode('/',$dateArray);
             $startTimeArray = explode(':', $_POST['startTime']);
             $endTimeArray = explode(':', $_POST['endTime']);
+            $timestamp = strtotime($_POST['date']);
+            $dayOfWeek = date('N', $timestamp);
 
-            // DEBUG
-            var_dump_pre($dateArray, '61: $dateArray');
-            var_dump_pre($startTimeArray, '62: $startTimeArray');
-            var_dump_pre($endTimeArray, '63: $endTimeArray');
-            
+            // IF WEEK-END
+            if ($dayOfWeek == 6 || $dayOfWeek == 7) {
+                $_SESSION['error'] = 'Vous ne pouvez pas faire de réservations le Samedi ou le Dimanche. Merci de corriger votre demande.';
+                header('Location: reservation-form.php');
+                return;
+            }
             // IF ANTEDATE
-            if ($endTimeArray[0] <= $startTimeArray[0]) {
-                $_SESSION['error'] = 'L\'heure de fin de votre réservation n\'est pas valide. Merci de faire les corrections nécessaires.';
+            elseif ($endTimeArray[0] <= $startTimeArray[0]) {
+                $_SESSION['error'] = 'L\'heure de fin de votre réservation n\'est pas valide, elle finit avant d\'avoir commencé. 
+                                    Merci de faire les corrections nécessaires.';
                 header('Location: reservation-form.php');
                 return;
             }
             // USER INPUTS MINUTES OTHER THAN 00
             elseif ($endTimeArray[1] != '00' || $startTimeArray[1] != '00') {
                 // CHANGER LE MSG , TOUT DE MEME...
-                $_SESSION['error'] = 'Vous ne lisez pas ce que je vous écris, car vous êtes un con. <br />PAS DE MINUTES!';
+                $_SESSION['error'] = 'Vous ne pouvez pas utiliser de minutes';
                 header('Location: reservation-form.php');
                 return;
             }
@@ -80,12 +91,10 @@
                 $dateTime = $_POST['date'] . ' ' .$_POST['startTime'] . ':00';
                 $resDateTime = strtotime($dateTime);
 
-                // DEBUG
-                print_r_pre($timestampNow, '77: $timestampNow: ');
-                var_dump_pre($resDateTime, '88: $resDateTime');
-
+                // CHOOSING TO START IN THE PAST
                 if ($resDateTime <= $timestampNow) {
-                    $_SESSION['error'] = 'Vous avez fait une réservation dans le passé. Merci de faire les corrections nécessaires.';
+                    $_SESSION['error'] = 'Vous avez fait une réservation dans le passé. 
+                                        Merci de faire les corrections nécessaires.';
                     header('Location: reservation-form.php');
                     return;
                 }
@@ -142,8 +151,8 @@
             ?>
             <!-- à envoyer en POST, car le descriptif peut-être long... -->
             <p>
-                Attention: Les réservations ne se font que par heures complètes, 
-                par exemple 16:00 et non pas 16:30. 
+                Attention: Les réservations ne se font que par heures rondes, 
+                par exemple 16:00 et non pas 16:30 ou 16:59. 
                 Si vous choisissez une heure de début ou de fin ne respectant pas ce format, 
                 votre réservation ne pourra pas être validée.
             </p>

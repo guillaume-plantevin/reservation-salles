@@ -8,6 +8,13 @@
         (ex : http://localhost/reservationsalles/evenement/?id=1​) 
         Seuls les personnes connectées peuvent accéder aux événements.
     */
+    session_start();
+    
+    require_once('functions/functions.php');
+    require_once('pdo.php');
+    require_once('class/week.php');
+    require_once('class/events.php');
+
     $title = 'réservation';
 ?>
 <!DOCTYPE html>
