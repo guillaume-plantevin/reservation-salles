@@ -3,12 +3,19 @@
         public $days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
         public $months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
         
+        public $currentDay;
+        public $currentDayString;
+        public $currentIsMonday;
+        public $currentDate;
+        public $mondaysDate;
         public $day;
         public $month;
+        public $monthString;
         public $year;
 
         /**
-         * Month constructor
+         * week constructor: initialise tous les attributs
+         * @param int $day
          * @param int $month, le mois compris entre 1 et 12
          * @param int $year, L'année
          */
@@ -22,13 +29,30 @@
             if ($year === null) {
                 $year = intval(date('Y'));
             }
+            $dateString =$year  . '-' . $month . '-' . $day; 
+            $makeDate = new DateTimeImmutable($dateString);
+            $this->currentDay = intval($makeDate->format('N'));
+
+            // VERIFY IF CURRENT DAY IS MONDAY
+            if ($this->currentDay === 1) {
+                $this->mondaysDate = $day;
+                $this->currentIsMonday = TRUE;
+            } else {
+                $getMondayDate = $makeDate->modify('last Monday');
+                $this->mondaysDate = intval($getMondayDate->format('j'));
+                $this->currentIsMonday = FALSE;
+            }
+            // SET OTHER ATTRIBUTES
+            $this->currentDate = $dateString;
             $this->day = $day; 
             $this->month = $month;
             $this->year= $year;
+            $this->currentDayString = $this->days[$this->currentDay - 1];
+            $this->monthString = $this->months[$this->month - 1];
         }
 
         /**
-         * retourne le mois en toutes lettres (ex: Mars 2018)
+         * retourne le mois  en toutes lettres et l'année (ex: Mars 2018)
          * @return string
          */
         public function monthToString(): string {
@@ -36,7 +60,7 @@
         }
 
         /**
-         * Retourne le nom du jour
+         * Retourne le nom du jour en toutes lettres
          * @param int $index
          * @return string
          */
@@ -44,61 +68,45 @@
             return $this->days[$index];
         }
 
-        // public function getStartingDay(): \DateTime {
-        //     return new \DateTime("{$this->year}-{$this->month}-01");
-        // }
-
-        public function getMonday(): int {
-            $inputDate = $this->year . '-' . $this->month . '-' . $this->day ;
-            // DEBUG
-            echo $inputDate;
-            $input = new DateTime($inputDate);
-            $activeDay = (clone $input)->format('N');
-            
-            if ($activeDay === '1') {
-                print_r_pre($input, '59: $input');
-                return intval($input->format('d'));
-            }
-            else {
-                $output =  new DateTime();
-                $output->modify('last monday');
-                return intval($output->format('d'));
-            }
-        }
-
-
         /**
-         * renvoie le mois suivant
+         * renvoie la semaine suivante
          * @return Week
          */
-        public function nextWeek(DateTime $date): Week {
-
-
-            $day = $this->day+ 7;
-            $month = $this->month;
-            $year = $this->year;
-
-            if ($month > 12) {
-                $month = 1;
-                $year += 1;
-            }
+        public function nextWeek() {
+            $temp = new DateTimeImmutable($this->currentDate);
+            // var_dump_pre($temp, '$temp');
+            $temp2 = $temp->modify('next monday');
+            // var_dump_pre($temp2, '$temp2');
+            $day = $temp2->format('j');
+            $month = $temp2->format('n');
+            $year = $temp2->format('Y');
+            // die();
             return new Week($day, $month, $year);
         }
 
         /**
-         * renvoie le mois précédent
+         * renvoie la semaine précédente
          * @return Week
          */
-        public function previousWeek(DateTime $date): Week {
-
-
-            $month = $this->month ;
-            $year = $this->year;
-
-            if ($month < 1) {
-                $month = 12;
-                $year -= 1;
-            }
+        public function previousWeek(): Week {
+            $temp = new DateTimeImmutable($this->currentDate);
+            // var_dump_pre($temp, '$temp');
+            $temp2 = $temp->modify('previous monday');
+            // var_dump_pre($temp2, '$temp2');
+            $day = $temp2->format('j');
+            $month = $temp2->format('n');
+            $year = $temp2->format('Y');
+            // die();
             return new Week($day, $month, $year);
+
+
+            // $month = $this->month ;
+            // $year = $this->year;
+
+            // if ($month < 1) {
+            //     $month = 12;
+            //     $year -= 1;
+            // }
+            // return new Week($day, $month, $year);
         }
     }

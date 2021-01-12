@@ -1,13 +1,13 @@
-.connerie {
-    height: 100px;
+.calendar__nav {
+    height: 4em;
     display: flex;
     justify-content: space-evenly;
     align-items: baseline;
     /* background-color: red; */
 }
-h1 {
+/* h1 {
     color: lightseagreen;
-}
+} */
 /* table th td{
     border: 2px solid rgb(122, 122, 122);
 } */
@@ -17,14 +17,19 @@ h1 {
 }   
 .calendar__table th, .calendar__table td {
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 2px solid #aaa;
     vertical-align: top;
-    width: 14.29%;
+    /* width: 14.29%; */
+    width: 11%;
 }
 .calendar__weekday {
     font-weight: bold;
     color: black;
     font-size: 1.2em;
+}
+.calendar__weekend {
+    /* background-color: red; */
+    width: 10px;
 }
 .calendar__day {
     font-size: 1.3em;
@@ -33,3 +38,6 @@ h1 {
 .calendar__othermonth .calendar__day{
     opacity: .3;
 }
+
+/* .calendar__hour {    
+} */

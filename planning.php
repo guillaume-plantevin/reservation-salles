@@ -12,27 +12,35 @@
         Les créneaux ont une durée fixe d’une heure.
     */
 
+    // ex de $_GET
+    // ?day=22&month=02&year=2021
     require_once('functions/functions.php');
     require_once('pdo.php');
-    require_once('class/week.php');
+    // require_once('class/week.php');
+    require_once('class/week2.php');
+
+    date_default_timezone_set ('Europe/Paris');
 
     $title = 'planning';
+    $actWeek = new Week($_GET['day'] ?? null, $_GET['month'] ?? null, $_GET['year'] ?? null);
 
-    // date_default_timezone_set('Europe/Paris');
+    // DEBUG
+    var_dump_pre($actWeek->nextWeek(), '$actWeek->nextWeek()');
 
-    // $script_tz = date_default_timezone_get();
-    // if (strcmp($script_tz, ini_get('date.timezone'))){
-    //     echo 'Script timezone differs from ini-set timezone.';
-    // } else {
-    //     echo 'Script timezone and ini-set timezone match.';
-    // }
+    // var_dump_pre($actWeek, '$actWeek');
+    // $startingDayWeek = $actWeek->getMonday();
+    // var_dump_pre($startingDayWeek, 'startingDayWeek');
 
-    $activeWeek = new Week();
-    echo '<br />';
-    $test = (clone $activeWeek)->getMonday();
-    var_dump_pre($test, '33: $test');
+    // $start = $month->getStartingDay();
+    // $start = $start->format('N') === '1' ? $start : $month->getStartingDay()->modify('last monday');
 
+    // $activeDay = new DateTime('now');
+    // $presentDay = $activeDay->format('d');
+    // var_dump($presentDay);
+    // var_dump($start);
 
+    // $test = (clone $activeWeek)->getMonday();
+    // var_dump_pre($test, '33: $test');
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -40,125 +48,37 @@
     <body>
         <?php require_once('templates/header.php') ?>
         <main>
-        <h1>Planning</h1>
-        <table>
+            
+        <div class="calendar__nav">            
+            <a href="planning.php?day=<?= $actWeek->previousWeek()->day; ?>&month=<?= $actWeek->previousWeek()->month; ?>&year=<?= $actWeek->previousWeek()->year; ?>" class="btn btn-primary">&lt;</a>
+            <h1>planning: <?= $actWeek->monthToString(); ?></h1>
+            <a href="planning.php?day=<?= $actWeek->nextWeek()->day; ?>&month=<?= $actWeek->nextWeek()->month; ?>&year=<?= $actWeek->nextWeek()->year; ?>" class="btn btn-primary">&gt;</a>
+        </div>
+        <table class="calendar__table">
             <colgroup>
-                <col>
-                <col>
-                <col>
-                <col>
-                <col>
-                <col>
+                <col style="background-color: #ddd;">
+                <col span="5">
+                <col span="2" style="background-color: #ddd;">
             </colgroup>
-            <thead>
-                <tr>
-                    <th><?= $activeWeek->getMonth(); ?>
+            <tr>
+                <th class="calendar__hour">horaires</th>
+                <?php for ($i = 0; $i < 7; ++$i): ?>
+                    <th class="<?= ($i < 5) ? 'calendar__weekday': 'calendar__weekend'; ?>">
+                        <?= $actWeek->getWeekDays($i); ?> <?= $actWeek->mondaysDate + $i; ?>
                     </th>
-                    <th class="days">Lundi</th>
-                    <th class="days">Mardi</th>
-                    <th class="days">Mercredi</th>
-                    <th class="days">Jeudi</th>
-                    <th class="days">Vendredi</th>
-                </tr>
-            </thead>
-            <tbody>
+                <?php endfor; ?>
+                <!-- $date = (clone $start)->modify("+" . ($k + $i * 7) . " days"); -->
+            </tr>
+            <?php for ($i = 0; $i < 11; ++$i): ?> 
                 <tr>
-                    <th class="hours">8:00</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <th><?=$i+8 . ':00'; ?></th>
+                    <?php for ($j = 0; $j < 7; ++$j): ?>
+                        <td>...</td>
+                    <?php endfor; ?>
                 </tr>
-                <tr>
-                    <th class="hours">9:00</th>
-                    <td>
-                        <form action="reservation.php" method="GET">
-                            <input type="hidden" name="id" value='' />
-                            <input type="submit" value='détails' />
-                        </form>
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th class="hours">10:00</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th class="hours">11:00</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th class="hours">12:00</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th class="hours">13:00</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th class="hours">14:00</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th class="hours">15:00</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th class="hours">16:00</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th class="hours">17:00</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th class="hours">18:00</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </tbody>
+            <?php endfor; ?>
         </table>
-        
-        </main>
+    </main>
         <?php require_once('templates/footer.php') ?>
         
     </body>
