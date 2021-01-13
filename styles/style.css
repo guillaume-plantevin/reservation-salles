@@ -21,7 +21,9 @@ header a:hover {
   background-size: cover;
   /* background-color: red; */
 }
-
+.nav {
+  width: 100vh;
+}
 
 /* ===================== FOOTER =========================== */
 .footer {

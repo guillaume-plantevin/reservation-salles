@@ -88,7 +88,7 @@
         }
 
         /**
-         * renvoie la semaine précédente
+         * renvoie la semaine précédente, en 'utilisant' le jour actuel comme point de départ
          * @return Week
          */
         public function previousWeek(): Week {

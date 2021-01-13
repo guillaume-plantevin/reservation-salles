@@ -33,9 +33,8 @@
     // IF SO, I SHOULD INPUT '+7 days - 1 second'
     $end = (clone $start)->modify('+ 5 days - 1 second');
     // var_dump_pre($end, '$end');
-    $events = $eventsFromDB->getEventsBetween($start, $end);
-    // var_dump_pre($events, '$events');
-    // die();
+    $events = $eventsFromDB->getEventsBetweenByDay($start, $end);
+    print_r_pre($events, '$events');
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -64,7 +63,12 @@
                 <tr>
                     <th><?= $i + 8 . ':00'; ?></th>
                     <?php for ($j = 0; $j < 7; ++$j): ?>
-                        <td>...</td>
+                        <td> 
+                            <?='x:' . $i . ', y:' . $j; 
+                                
+
+                            ?>
+                        </td>
                     <?php endfor; ?>
                 </tr>
             <?php endfor; ?>
