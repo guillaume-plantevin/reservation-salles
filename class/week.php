@@ -33,7 +33,7 @@
             if ($year === null) {
                 $year = intval(date('Y'));
             }
-            $dateString =$year  . '-' . $month . '-' . $day; 
+            $dateString = $year  . '-' . $month . '-' . $day; 
             $makeDate = new DateTimeImmutable($dateString);
             $this->currentDay = intval($makeDate->format('N'));
 
@@ -77,12 +77,13 @@
          * @return Week
          */
         public function nextWeek(): Week {
-            $temp = new DateTimeImmutable($this->currentDate);
-            $temp2 = $temp->modify('next monday');
+            $tempDate = new DateTimeImmutable($this->currentDate);
+            $dayName = $tempDate->format('l');
+            $tempDate2 = $tempDate->modify('next ' . $dayName);
 
-            $day = $temp2->format('j');
-            $month = $temp2->format('n');
-            $year = $temp2->format('Y');
+            $day = $tempDate2->format('j');
+            $month = $tempDate2->format('n');
+            $year = $tempDate2->format('Y');
 
             return new Week($day, $month, $year);
         }
@@ -109,5 +110,22 @@
          */
         public function getStartingDay(): DateTime {
             return new DateTime("{$this->year}-{$this->month}-{$this->mondaysDate}");
+        }
+
+        /**
+         * prend deux 'Y-m-d H:i:s' en entrée et renvoie la durée en heures
+         * @param string $start
+         * @param string $end
+         * @return int
+         */
+        public function timeLength(string $start, string $end): int {
+            $tempOne = new DateTime($start);
+            $tempTwo = new DateTime($end);
+            
+            $length = date_diff($tempOne, $tempTwo);
+            echo $length[h];
+            die();
+            var_dump_pre($length, '$length');
+
         }
     }

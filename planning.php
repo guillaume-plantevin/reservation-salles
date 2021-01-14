@@ -27,14 +27,18 @@
     $eventsFromDB = new Events();
 
     $actWeek = new Week($_GET['day'] ?? null, $_GET['month'] ?? null, $_GET['year'] ?? null);
-    $start = $actWeek->getStartingDay();
-    // var_dump_pre($start, '$start');
+    // var_dump_pre($actWeek, '$actWeek');
+    
+    $startingDayWeek = $actWeek->getStartingDay();
+    // var_dump_pre($startingDayWeek, '$startingDayWeek');
     // SHOULD INCLUDE THE WEEK-END?
     // IF SO, I SHOULD INPUT '+7 days - 1 second'
-    $end = (clone $start)->modify('+ 5 days - 1 second');
+    $end = (clone $startingDayWeek)->modify('+ 5 days - 1 second');
     // var_dump_pre($end, '$end');
-    $events = $eventsFromDB->getEventsBetweenByDay($start, $end);
-    print_r_pre($events, '$events');
+    $events = $eventsFromDB->getEventsBetweenByDay($startingDayWeek, $end);
+    // $events = $eventsFromDB->getEventsBetweenByDayTime($startingDayWeek, $end);
+    // die();
+    // print_r_pre($events, '[40]-> $events');
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -56,18 +60,38 @@
             <tr>
                 <th class="calendar__hour">horaires</th>
                 <?php for ($i = 0; $i < 7; ++$i): ?>
+                    <?php
+                        $date = (clone $startingDayWeek)->modify('+ ' . $i . ' days');
+                        // var_dump_pre($date, '64: $date');
+                        // die();
+                        $eventsForDay = $events[$startingDayWeek->format('Y-m-d')] ?? []; 
+                        // var_dump_pre($eventsForDay, '[67] -> eventsForDay');
+                    ?>
+
                     <th class="<?= ($i < 5) ? 'calendar__weekday': 'calendar__weekend'; ?>"><?= $actWeek->getWeekDays($i); ?> <?= $actWeek->mondaysDate + $i; ?></th>
                 <?php endfor; ?>
             </tr>
             <?php for ($i = 0; $i < 11; ++$i): ?> 
                 <tr>
-                    <th><?= $i + 8 . ':00'; ?></th>
+                    <th><?= $time = ($i + 8) . ':00'; ?></th>
                     <?php for ($j = 0; $j < 7; ++$j): ?>
                         <td> 
-                            <?='x:' . $i . ', y:' . $j; 
-                                
-
+                            <?php
+                                $dateTime = $date->format('Y-m-d') .  ' ' . $time . ':00';
+                                echo $dateTime, '<br />';
+                                foreach ($eventsForDay as $event) {
+                                    echo 'debut: ' . $event['debut'];
+                                    if ($dateTime == $event['debut']) {
+                                        echo 'OK';
+                                        // echo $event['login'];
+                                        // echo $event['titre'];
+                                    }
+                                }
+                                // die();
+                                // echo $time, '<br>';
                             ?>
+                            <!-- representation de la grid -->
+                            
                         </td>
                     <?php endfor; ?>
                 </tr>

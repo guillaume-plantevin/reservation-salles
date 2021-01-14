@@ -1,14 +1,15 @@
 <?php
     function print_r_pre($array, $name) {
-        echo '<pre>' . $name . ':<br />';
+        echo '<pre>' . $name . ':<br />', "\n";
         print_r($array);
-        echo '</pre>';
+        echo '</pre>', "\n";
     }
     function var_dump_pre($array, $name) {
-        echo '<pre>' . $name . ':<br />';
+        echo '<pre>' . $name . ':<br />', "\n";
         var_dump($array);
-        echo '</pre>';
+        echo '</pre>', "\n";
     }
+    
     function randomRgb() {
         $r = rand(0, 255);
         $g = rand(0, 255);
