@@ -16,7 +16,6 @@
         public $month;
         public $year;
 
-
         /**
          * week constructor: initialise tous les attributs
          * @param int $day

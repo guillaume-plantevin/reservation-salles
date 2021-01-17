@@ -81,20 +81,42 @@
             $length = date_diff($tempOne, $tempTwo);
             return $length->h;
         }
+
         /**
-         * 
+         * retourne toute
+         * @param int $id
          */
-        public function getEvent(int $id) {
+        public function getEvent(int $id): array {
             $sql = "SELECT 
                     reservations.id, reservations.titre, reservations.description, reservations.debut, reservations.fin, utilisateurs.login 
                     FROM reservations JOIN utilisateurs 
-                    WHERE reservations.id = :id
-            ";
+                    WHERE reservations.id = :id";
             echo $sql;
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([':id' => $id]);
             $results = $stmt->fetchAll();
             var_dump_pre($results, '$results');
+            // die();
+            return $results;
+        }
+
+        /**
+         * retourne toute
+         * @param int $id
+         */
+        public function getEventById(int $id): array {
+            $sql = "SELECT 
+                    reservations.id, reservations.titre, reservations.description, reservations.debut, reservations.fin, utilisateurs.login 
+                    FROM reservations JOIN utilisateurs 
+                    WHERE reservations.id = :id";
+
+            // DEBUG
+            // echo $sql;
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([':id' => $id]);
+            $results = $stmt->fetch(PDO::FETCH_ASSOC);
+            // DEBUG
+            // var_dump_pre($results, '$results');
             // die();
             return $results;
         }

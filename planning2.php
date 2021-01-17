@@ -50,8 +50,10 @@
             </colgroup>
             <?php 
             // CONSTRUCT THE TABLE
+            // ROWS
             for ($y = 0; $y < 12; ++$y) {
                 echo '<tr>', "\n";
+                // COLUMNS
                 for ($x = 0; $x < 8; ++$x) {
 
                     if ($y == 0 && $x == 0)
