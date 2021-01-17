@@ -111,21 +111,4 @@
         public function getStartingDay(): DateTime {
             return new DateTime("{$this->year}-{$this->month}-{$this->mondaysDate}");
         }
-
-        /**
-         * prend deux 'Y-m-d H:i:s' en entrée et renvoie la durée en heures
-         * @param string $start
-         * @param string $end
-         * @return int
-         */
-        public function timeLength(string $start, string $end): int {
-            $tempOne = new DateTime($start);
-            $tempTwo = new DateTime($end);
-            
-            $length = date_diff($tempOne, $tempTwo);
-            echo $length[h];
-            die();
-            var_dump_pre($length, '$length');
-
-        }
     }

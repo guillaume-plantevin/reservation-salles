@@ -22,13 +22,20 @@
     echo breakingLine();
 
 
-    if ( isset($_POST['cancel']) ) {
+    if (isset($_POST['cancel'])) {
         header('Location: deconnexion.php');
         return;
     }
+    // POST-FORM SUBMIT
     if ( isset($_POST['submit'])) {
         // NO TITLE
         if (empty($_POST['title'])) {
+            $_SESSION['error'] = 'Vous devez entrer un titre pour votre réservation.';
+            header('Location: reservation-form.php');
+            return;
+        }
+        // TOO LONG TITLE
+        elseif (strlen($_POST['titre'])) {
             $_SESSION['error'] = 'Vous devez entrer un titre pour votre réservation.';
             header('Location: reservation-form.php');
             return;
@@ -54,6 +61,13 @@
         // NO DESCRIPTION
         elseif (empty($_POST['description'])) {
             $_SESSION['error'] = 'Vous devez écrire une description pour votre réservation.';
+            header('Location: reservation-form.php');
+            return;
+        }
+        // > 65,535 chars
+        // TOO LONG DESCRIPTION
+        elseif (strlen($_POST['description']) > 65535) {
+            $_SESSION['error'] = 'Votre description est trop longue.';
             header('Location: reservation-form.php');
             return;
         }
@@ -135,7 +149,6 @@
         <?php require_once('templates/header.php') ?>
         <main>
             <h1>Formulaire de réservation de salle</h1>
-            <p>Le blahblah habituel...</p>
             <?php
                 if (isset($_SESSION['error'])) {
                     echo '<p class="error">' . $_SESSION['error'] . '</p>';
@@ -150,11 +163,16 @@
                 else :
             ?>
             <!-- à envoyer en POST, car le descriptif peut-être long... -->
+            <p>Pour pouvoir faire une réservation, vous devez respecter quelques consignes: </p>
+            <ul>
+                <li>Vous ne pouvez pas antidater une réservation,</li>
+                <li>elles sont ouvertes du Lundi au Vendredi inclus, </li>
+                <li>elles doivent débuter entre 08:00 et 18:00,</li>
+                <li>et ne peuvent après 19:00 </li>
+                <li>Les réservations ne se font que par heures rondes, par exemple 16:00 et non pas 16:30 ou 16:59.</li>
+            </ul>
             <p>
-                Attention: Les réservations ne se font que par heures rondes, 
-                par exemple 16:00 et non pas 16:30 ou 16:59. 
-                Si vous choisissez une heure de début ou de fin ne respectant pas ce format, 
-                votre réservation ne pourra pas être validée.
+                Si vous ne respectez pas ces règles, votre réservation ne pourra pas être validée et un message vous indiquera quelle correction vous devrait faire.
             </p>
             <form method="POST">
                 <label for="title">Titre:</label>

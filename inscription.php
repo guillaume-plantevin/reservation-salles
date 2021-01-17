@@ -42,6 +42,18 @@
             header('Location: inscription.php');
             return;
         }
+        // TOO LONG LOGIN
+        elseif (strlen(($_POST['login'])) > 255) {
+            $_SESSION['error'] = 'Votre login est trop long. Veuillez en choisir un plus court';
+			header("Location: profil.php");
+            return;
+        }
+        // TOO LONG PASSWORD
+        elseif (strlen(($_POST['password'])) > 255) {
+            $_SESSION['error'] = 'Votre mot de passe est trop long. Veuillez en choisir un plus court';
+			header("Location: profil.php");
+            return;
+        }
         // EVERYTHING'S  OK, CONTINUE
         else {
             $loginLength = strlen($_POST['login']);

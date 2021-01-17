@@ -16,6 +16,13 @@
     require_once('class/events.php');
 
     $title = 'réservation';
+
+    var_dump_pre($_GET, '$_GET');
+    $event = new Events;
+
+
+    $eventInfos = $event->getEvent($_GET['id']);
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
