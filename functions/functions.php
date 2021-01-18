@@ -9,7 +9,11 @@
         var_dump($array);
         echo '</pre>', "\n";
     }
-    
+    function dump($input) {
+        echo '<pre>';
+        var_dump($input);
+        echo '</pre>';
+    }
     function randomRgb() {
         $r = rand(0, 255);
         $g = rand(0, 255);

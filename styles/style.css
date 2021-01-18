@@ -127,11 +127,19 @@ col {
   padding: 2em;
 }
 .reservation p {
+  font-size: 1.1em;
   margin: 1.5em 0;
 }
 .reservationTitre {
   font-size: 1.2em;
   font-weight: bold;
+}
+.info {
+  text-decoration: underline;
+  font-size: 1.2em;
+}
+.loginReserv {
+  font-style: italic;
 }
 /* ===================== ... =========================== */
 /* ===================== ... =========================== */

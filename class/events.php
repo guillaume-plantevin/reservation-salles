@@ -94,7 +94,8 @@
             echo $sql;
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([':id' => $id]);
-            $results = $stmt->fetchAll();
+            $results = $stmt->fetch(PDO::FETCH_ASSOC);
+            // DEBUG
             var_dump_pre($results, '$results');
             // die();
             return $results;
@@ -108,7 +109,8 @@
             $sql = "SELECT 
                     reservations.id, reservations.titre, reservations.description, reservations.debut, reservations.fin, utilisateurs.login 
                     FROM reservations JOIN utilisateurs 
-                    WHERE reservations.id = :id";
+                    WHERE reservations.id = :id
+                    AND utilisateurs.id = reservations.id_utilisateur";
 
             // DEBUG
             // echo $sql;
