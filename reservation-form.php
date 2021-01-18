@@ -35,8 +35,8 @@
             return;
         }
         // TOO LONG TITLE
-        elseif (strlen($_POST['titre'])) {
-            $_SESSION['error'] = 'Vous devez entrer un titre pour votre réservation.';
+        elseif (strlen($_POST['title'] > 255)) {
+            $_SESSION['error'] = 'Votre titre est trop long.';
             header('Location: reservation-form.php');
             return;
         }
@@ -71,7 +71,7 @@
             header('Location: reservation-form.php');
             return;
         }
-        // OK, CONTINUE (VALIDATING DATE AND TIME)
+        // OK, CONTINUE (VALIDATING INPUTS: DATE AND TIME)
         else {
             $dateArray = explode('-', $_POST['date']);
             $startTimeArray = explode(':', $_POST['startTime']);
@@ -130,36 +130,56 @@
                 header('Location: reservation-form.php');
                 return;
             }
-            // VERIFIER QU'AUCUNE RESERVATION N'A LIEU DURANT LA PRESENTE RESERVATION
+            // OK, CONTINUE 
             else {
+                /**
+                 * utiliser des timestamps, ça devrait être plus simple de savoir
+                 */
+                $dateStart = $_POST['date'] . ' ' . $_POST['startTime'] . ':00';
+                $dateEnd = $_POST['date'] . ' ' . $_POST['endTime'] . ':00';
 
+                $sql = "SELECT * FROM reservations  
+                        WHERE debut BETWEEN :debut AND :fin";
+                
+                echo $sql;
+                
+                $verify = $pdo->prepare($sql);
+                $verify->execute([
+                    ':debut' => $dateStart,
+                    ':fin' => $dateEnd
+                ]);
+
+                $results = $verify->fetch(PDO::FETCH_ASSOC);
+
+                // DEBUG
+                var_dump_pre($results, '$results');
+                // die();
+                if (!empty($results)) {
+                    $_SESSION['error'] = 'Il existe déjà une réservation dans le planning entre votre heure de début et votre heure de fin.';
+                    header('Location: reservation-form.php');
+                    return;
+                }
+
+                // $insert = "INSERT INTO reservations 
+                //     (titre, description, debut, fin, id_utilisateur) 
+                //     VALUES (:title, :description, :debut, :fin, :id_user)";
+
+                // DEBUG
+                // echo $insert. '<br>';
+
+                // $stmt = $pdo->prepare($insert);
+
+                // $stmt->execute([
+                //     ':title'=> htmlentities($_POST['title']),
+                //     ':description'=> htmlentities($_POST['description']), 
+                //     ':debut'=> $dateStart, 
+                //     ':fin'=> $dateEnd, 
+                //     ':id_user'=> $_SESSION['id']
+                // ]);
+                    
+    
+                // $_SESSION['success']= 'Votre réservation a bien été enregistré. Vous pouvez dès maintenant la voir sur le planning.';
             }
-            // echo date();
-
-            /*
-            $insert = "INSERT INTO reservations 
-                    (titre, description, debut, fin, id_utilisateur) 
-                    VALUES (:title, :description, :debut, :fin, :id_user)";
-
-            // DEBUG
-            echo $insert. '<br>';
-            
-            $stmt = $pdo->prepare($insert);
-
-            $dateStart = $_POST['date'] . ' ' . $_POST['startTime'] . ':00';
-            $dateEnd = $_POST['date'] . ' ' . $_POST['endTime'] . ':00';
-
-            $stmt->execute([
-                ':title'=> htmlentities($_POST['title']),
-                ':description'=> htmlentities($_POST['description']), 
-                ':debut'=> $dateStart, 
-                ':fin'=> $dateEnd, 
-                ':id_user'=> $_SESSION['id']
-            ]);
-            */
-
-            // $_SESSION['success']= 'Votre réservation a bien été enregistré. Vous pouvez dès maintenant la voir sur le planning.';
-            
         }
     }
 ?>

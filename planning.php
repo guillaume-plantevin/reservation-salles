@@ -11,7 +11,7 @@
         Les réservations se font du lundi au vendredi et de 8h et 19h. 
         Les créneaux ont une durée fixe d’une heure.
     */
-    // session_start();
+    session_start();
 
     // ex de $_GET
     // ?day=22&month=02&year=2021
@@ -25,20 +25,11 @@
     $title = 'planning';
 
     $eventsFromDB = new Events();
-
     $actWeek = new Week($_GET['day'] ?? null, $_GET['month'] ?? null, $_GET['year'] ?? null);
-    // var_dump_pre($actWeek, '$actWeek');
-    
     $startingDayWeek = $actWeek->getStartingDay();
-    // var_dump_pre($startingDayWeek, '$startingDayWeek');
-    // SHOULD INCLUDE THE WEEK-END?
-    // IF SO, I SHOULD INPUT '+7 days - 1 second'
     $end = (clone $startingDayWeek)->modify('+ 5 days - 1 second');
-    // var_dump_pre($end, '$end');
-    $events = $eventsFromDB->getEventsBetweenByDay($startingDayWeek, $end);
-    // $events = $eventsFromDB->getEventsBetweenByDayTime($startingDayWeek, $end);
-    // die();
-    // print_r_pre($events, '[40]-> $events');
+    $events = $eventsFromDB->getEventsBetweenByDayTime($startingDayWeek, $end);
+    // print_r_pre($events, '[41]-> $events');
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -51,51 +42,89 @@
             <h1>planning: <?= $actWeek->monthToString(); ?></h1>
             <a href="planning.php?day=<?= $actWeek->nextWeek()->day; ?>&month=<?= $actWeek->nextWeek()->month; ?>&year=<?= $actWeek->nextWeek()->year; ?>" class="btn btn-primary">&gt;</a>
         </div>
-        <table class="calendar__table">
+        <table class="table table-hover calendar__table">
             <colgroup>
                 <col style="background-color:#ddd;">
                 <col span="5">
                 <col span="2" style="background-color:#ddd;">
             </colgroup>
-            <tr>
-                <th class="calendar__hour">horaires</th>
-                <?php for ($i = 0; $i < 7; ++$i): ?>
-                    <?php
-                        $date = (clone $startingDayWeek)->modify('+ ' . $i . ' days');
-                        // var_dump_pre($date, '64: $date');
-                        // die();
-                        $eventsForDay = $events[$startingDayWeek->format('Y-m-d')] ?? []; 
-                        // var_dump_pre($eventsForDay, '[67] -> eventsForDay');
-                    ?>
+            <?php 
+            // CONSTRUCT THE TABLE
+            // ROWS
+            for ($y = 0; $y < 12; ++$y) {
+                echo '<tr>', "\n";
+                // COLUMNS
+                for ($x = 0; $x < 8; ++$x) {
 
-                    <th class="<?= ($i < 5) ? 'calendar__weekday': 'calendar__weekend'; ?>"><?= $actWeek->getWeekDays($i); ?> <?= $actWeek->mondaysDate + $i; ?></th>
-                <?php endfor; ?>
-            </tr>
-            <?php for ($i = 0; $i < 11; ++$i): ?> 
-                <tr>
-                    <th><?= $time = ($i + 8) . ':00'; ?></th>
-                    <?php for ($j = 0; $j < 7; ++$j): ?>
-                        <td> 
-                            <?php
-                                $dateTime = $date->format('Y-m-d') .  ' ' . $time . ':00';
-                                echo $dateTime, '<br />';
-                                foreach ($eventsForDay as $event) {
-                                    echo 'debut: ' . $event['debut'];
-                                    if ($dateTime == $event['debut']) {
-                                        echo 'OK';
-                                        // echo $event['login'];
-                                        // echo $event['titre'];
-                                    }
+                    if ($y == 0 && $x == 0)
+                        echo '<th>Horaires</th>';
+                    elseif ($y == 0 && $x > 0) {
+                        $numbDay = $actWeek->mondaysDate + $x - 1;
+                        echo '<th>' . $actWeek->getWeekDays($x - 1) . ' ' . $numbDay .  '</th>';
+                    }
+                    elseif ($x == 0 && $y > 0) {
+                        $tempHour = 7 + $y;
+                        if ($tempHour < 10) {
+                            $hour = '0' . $tempHour . ':00';
+                        }
+                        else {
+                            $hour = $tempHour . ':00';
+                        }
+                        echo '<th>' . $hour . '</th>';
+                    }
+                    else {
+                        // CREATE DATES & TIMES TO PUT IN REGARD OF ARRAY FROM DB
+                        $tempDay = $actWeek->mondaysDate + $x - 1;
+                        $fullDayDate = $actWeek->year . '-' . '0' .$actWeek->month . '-' . $tempDay;
+                        $hourFull = $hour . ':00';
+                        $fullDayDateTime = $fullDayDate . ' ' . $hourFull;
+                        // $activeRowSpan;
+
+                        // rowspan -> nombre d'heures
+                        // echo '<td  rowspan=';
+                        // if (isset($activeRowSpan) && $activeRowSpan > 1) {
+                        //     // echo 'stop';
+                        //     // die();
+                        // }
+                        // else {
+                            echo '<td rowspan=';
+                        // }
+                        foreach ($events as $k => $event) {
+                            if ($k == $fullDayDateTime) {
+                                $diff = new Events;
+                                $length = $diff->timeLength($event['debut'], $event['fin']);
+                                // $length > 1 ? : $leng
+                                if ($length > 1) {
+                                    $activeRowSpan = $length;
+                                    // echo $activeRowSpan;
+                                    // die();
+                                    echo $length;
+                                    // une couille dans le potage...
+                                    // style="color:blue;">
+                                    echo ' style="color:white;text-shadow: 2px 1px 2px black; background-color:' . randomHsla() . '"';
+                                    echo '>';
+                                    // merde, ça décale les cases en-dessous
+                                    // echo $length, '<br>';
                                 }
-                                // die();
-                                // echo $time, '<br>';
-                            ?>
-                            <!-- representation de la grid -->
-                            
-                        </td>
-                    <?php endfor; ?>
-                </tr>
-            <?php endfor; ?>
+                                else {
+                                    echo 1;
+                                    echo ' style="color:white;text-shadow: 2px 1px 2px black; background-color:' . randomHsla() . '"';
+                                    echo '>';
+                                    // exit();
+                                }
+                                // echo '<td>';
+                                echo '(' . $length . ') ';
+                                echo $event['login'], ',<br />';
+                                echo $event['titre'], '<br />';
+                                echo "<a href=\"reservation.php?id=" . $event['id'] . '">détails</a>';
+                                // echo '</td>';
+                            }
+                        }
+                        echo '</td>';
+                    }
+                }
+            }
+            ?>
         </table>
     </main>
     <?php require_once('templates/footer.php') ?>

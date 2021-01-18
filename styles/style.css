@@ -118,13 +118,15 @@ col {
 .calendar__othermonth .calendar__day{
   opacity: .3;
 }
-
+td a {
+  color: white;
+}
 
 /* ===================== RESERVATIONS =========================== */
 .reservation {
-  height: 60vh;
+  height: calc(100vh - 350px);
   border: 2px solid black;
-  padding: 2em;
+  padding: 1.5em 1em;
 }
 .reservation p {
   font-size: 1.1em;

@@ -96,7 +96,7 @@
             $stmt->execute([':id' => $id]);
             $results = $stmt->fetch(PDO::FETCH_ASSOC);
             // DEBUG
-            var_dump_pre($results, '$results');
+            // var_dump_pre($results, '$results');
             // die();
             return $results;
         }
@@ -112,14 +112,10 @@
                     WHERE reservations.id = :id
                     AND utilisateurs.id = reservations.id_utilisateur";
 
-            // DEBUG
-            // echo $sql;
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([':id' => $id]);
             $results = $stmt->fetch(PDO::FETCH_ASSOC);
-            // DEBUG
-            // var_dump_pre($results, '$results');
-            // die();
+
             return $results;
         }
     }
