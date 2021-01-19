@@ -99,8 +99,8 @@
                             }
                             if (isset($cellLength) && $cellLength !== FALSE) {
                                 echo '<td rowspan="'. $cellLength . '"';
-                                echo ' style="color:white;text-shadow: 2px 1px 2px black; background-color:' . randomHsla() . '">';
-                                echo '(' . $cellLength . ')', '<br>';
+                                echo ' style="color:white;text-shadow: 1px 1px 1px black; background-color:' . randomHsla() . '">';
+                                // echo '(' . $cellLength . ')', '<br>';
                                 echo $currentEvent['login'], ',<br />';
                                 echo $currentEvent['titre'], '<br />';
                                 echo "<a href=\"reservation.php?id=" . $currentEvent['id'] . '">détails</a>';
@@ -121,7 +121,7 @@
                                 else {
                                     echo '<td>';
                                     // ERASE AFTER DEBUG
-                                    echo '[' . $coordinate . ']';
+                                    // echo '[' . $coordinate . ']';
                                     echo '</td>';
                                 }
                             }
