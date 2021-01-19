@@ -25,11 +25,22 @@
     $title = 'planning';
 
     $eventsFromDB = new Events();
+    $tableCell = [];
+    $currentEvent = [];
+
     $actWeek = new Week($_GET['day'] ?? null, $_GET['month'] ?? null, $_GET['year'] ?? null);
     $startingDayWeek = $actWeek->getStartingDay();
     $end = (clone $startingDayWeek)->modify('+ 5 days - 1 second');
+
     $events = $eventsFromDB->getEventsBetweenByDayTime($startingDayWeek, $end);
-    // print_r_pre($events, '[41]-> $events');
+    // DEBUG
+    // print_r_pre($events, '[34]-> $events');
+    foreach ($events as $k => $event) {
+        $tableCell[$event['case']] = $event['length'];
+    }
+    // DEBUG
+    // var_dump_pre($tableCell, '40: tableCell');
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -49,81 +60,75 @@
                 <col span="2" style="background-color:#ddd;">
             </colgroup>
             <?php 
-            // CONSTRUCT THE TABLE
-            // ROWS
-            for ($y = 0; $y < 12; ++$y) {
-                echo '<tr>', "\n";
-                // COLUMNS
-                for ($x = 0; $x < 8; ++$x) {
+                // CONSTRUCT THE TABLE
+                // ROWS
+                for ($y = 0; $y < 12; ++$y) {
+                    echo '<tr>', "\n";
+                    // COLUMNS
+                    for ($x = 0; $x < 8; ++$x) {
+                        $coordinate = $y . '-' . $x;
+                        $cellLength = null;
 
-                    if ($y == 0 && $x == 0)
-                        echo '<th>Horaires</th>';
-                    elseif ($y == 0 && $x > 0) {
-                        $numbDay = $actWeek->mondaysDate + $x - 1;
-                        echo '<th>' . $actWeek->getWeekDays($x - 1) . ' ' . $numbDay .  '</th>';
-                    }
-                    elseif ($x == 0 && $y > 0) {
-                        $tempHour = 7 + $y;
-                        if ($tempHour < 10) {
-                            $hour = '0' . $tempHour . ':00';
+                        if ($y == 0 && $x == 0)
+                            echo '<th>Horaires</th>';
+
+                        elseif ($y == 0 && $x > 0) {
+                            $daysNumber = $actWeek->mondaysDate + $x - 1;
+                            echo '<th>' . $actWeek->getWeekDays($x - 1) . ' ' . $daysNumber .  '</th>';
+                        }
+                        elseif ($y > 0 && $x == 0) {
+                            $tempHour = 7 + $y;
+                            if ($tempHour < 10) {
+                                $hour = '0' . $tempHour . ':00';
+                            }
+                            else {
+                                $hour = $tempHour . ':00';
+                            }
+                            echo '<th>' . $hour . '</th>';
                         }
                         else {
-                            $hour = $tempHour . ':00';
-                        }
-                        echo '<th>' . $hour . '</th>';
-                    }
-                    else {
-                        // CREATE DATES & TIMES TO PUT IN REGARD OF ARRAY FROM DB
-                        $tempDay = $actWeek->mondaysDate + $x - 1;
-                        $fullDayDate = $actWeek->year . '-' . '0' .$actWeek->month . '-' . $tempDay;
-                        $hourFull = $hour . ':00';
-                        $fullDayDateTime = $fullDayDate . ' ' . $hourFull;
-                        // $activeRowSpan;
-
-                        // rowspan -> nombre d'heures
-                        // echo '<td  rowspan=';
-                        // if (isset($activeRowSpan) && $activeRowSpan > 1) {
-                        //     // echo 'stop';
-                        //     // die();
-                        // }
-                        // else {
-                            echo '<td rowspan=';
-                        // }
-                        foreach ($events as $k => $event) {
-                            if ($k == $fullDayDateTime) {
-                                $diff = new Events;
-                                $length = $diff->timeLength($event['debut'], $event['fin']);
-                                // $length > 1 ? : $leng
-                                if ($length > 1) {
-                                    $activeRowSpan = $length;
-                                    // echo $activeRowSpan;
-                                    // die();
-                                    echo $length;
-                                    // une couille dans le potage...
-                                    // style="color:blue;">
-                                    echo ' style="color:white;text-shadow: 2px 1px 2px black; background-color:' . randomHsla() . '"';
-                                    echo '>';
-                                    // merde, ça décale les cases en-dessous
-                                    // echo $length, '<br>';
+                            foreach($tableCell as $key => $value) {
+                                if ($coordinate === $key) {
+                                    $cellLength = $value;
+                                }
+                            }
+                            foreach ($events as $k => $event) {
+                                if ($coordinate == $event['case']) {
+                                    $currentEvent = $event;
+                                }
+                            }
+                            if (isset($cellLength) && $cellLength !== FALSE) {
+                                echo '<td rowspan="'. $cellLength . '"';
+                                echo ' style="color:white;text-shadow: 2px 1px 2px black; background-color:' . randomHsla() . '">';
+                                echo '(' . $cellLength . ')', '<br>';
+                                echo $currentEvent['login'], ',<br />';
+                                echo $currentEvent['titre'], '<br />';
+                                echo "<a href=\"reservation.php?id=" . $currentEvent['id'] . '">détails</a>';
+                                echo '</td>';
+                                
+                                // logical part
+                                $tempY = $y + 1;
+                                while ($cellLength > 1) {
+                                    $tableCell[$tempY . '-' . $x] = FALSE;
+                                    $tempY++;
+                                    $cellLength--;
+                                }
+                            }
+                            else {
+                                if (isset($tableCell[$coordinate])) {
+                                    ;
                                 }
                                 else {
-                                    echo 1;
-                                    echo ' style="color:white;text-shadow: 2px 1px 2px black; background-color:' . randomHsla() . '"';
-                                    echo '>';
-                                    // exit();
+                                    echo '<td>';
+                                    // ERASE AFTER DEBUG
+                                    echo '[' . $coordinate . ']';
+                                    echo '</td>';
                                 }
-                                // echo '<td>';
-                                echo '(' . $length . ') ';
-                                echo $event['login'], ',<br />';
-                                echo $event['titre'], '<br />';
-                                echo "<a href=\"reservation.php?id=" . $event['id'] . '">détails</a>';
-                                // echo '</td>';
                             }
                         }
-                        echo '</td>';
                     }
+                    echo '</tr>', "\n";
                 }
-            }
             ?>
         </table>
     </main>

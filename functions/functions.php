@@ -24,10 +24,10 @@
     }
     function randomHsl() {
         $h = rand(0, 359);
-        $s = rand(0, 100);
+        $s = rand(45, 100);
         if ($s !== 0) 
             $s .= '%';
-        $l = rand(0, 80);
+        $l = rand(35, 80);
         if ($l !== 0) 
             $l .= '%';
         return 'hsl(' . $h . ', ' . $s . ', ' . $l . ')';

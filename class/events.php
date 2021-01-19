@@ -1,6 +1,8 @@
 <?php
     class Events {
         private $pdo;
+        public $lengthEvents = [];
+        public $eventsForTheWeek = [];
 
         public function __construct() {
             $this->pdo = new PDO('mysql:host=localhost;dbname=reservationsalles', 'root', '', [
@@ -8,6 +10,7 @@
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
             ]);
         }
+
 
         /**
          * Retourne un array avec tous les événements compris entre deux dates
@@ -63,9 +66,30 @@
             $events = $this->getEventsBetween($start, $end);
             $days = [];
             foreach ($events as $event) {
-                $days[$event['debut']] = $event;
+                $day[$event['debut']] = $event;
+
+                $diff = new Events;
+                $length = $diff->timeLength($event['debut'], $event['fin']);
+
+                // <rajout> pour la presentation de <table>
+                $day[$event['debut']]['length'] = $length;
+                $dateStart = new DateTime($event['debut']);
+                $dateDay = $dateStart->format('N');
+                $timeHour = $dateStart->format('G');
+                $case = ($timeHour - 7) . '-' . $dateDay;
+                $day[$event['debut']]['case'] = $case;
+                $lengthEvents[$case] = $length;
+
+                // $tempY = $timeHour + 1;
+                // logical part
+                // while ($length > 1) {
+                //     $this->lengthEvents[$tempY . '-' . $dateDay] = FALSE;
+                //     $tempY++;
+                //     $length--;
+                // }
+                // </rajout>
             }
-            return $days;
+            return $day;
         }
 
         /**
@@ -95,9 +119,6 @@
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([':id' => $id]);
             $results = $stmt->fetch(PDO::FETCH_ASSOC);
-            // DEBUG
-            // var_dump_pre($results, '$results');
-            // die();
             return $results;
         }
 
