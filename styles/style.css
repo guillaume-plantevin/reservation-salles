@@ -18,13 +18,12 @@ header a:hover {
 #logo {
   height: 9em;
   background: center no-repeat url('../images/logo_crop.jpg');
-  background-size: cover;
+  background-size: contain;
   /* background-color: red; */
 }
 .nav {
   width: 100vh;
 }
-
 /* ===================== FOOTER =========================== */
 .footer {
   /* pose un problème */
@@ -77,12 +76,73 @@ col {
   /* NE FONCTIONNE PAS, FAIRE UNE RECHERCHE DANS LA DOCUMENTATION */
   height: 50px;
 }
+.calendar__nav {
+  height: 4em;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: baseline;
+}
+/* h1 {
+  color: lightseagreen;
+} */
+/* table th td{
+  border: 2px solid rgb(122, 122, 122);
+} */
+.calendar__table {
+  width: 100%;
+  /* height: calc(100vh - 120px); */
+  height: 110vh;
+}   
+.calendar__table th, .calendar__table td {
+  padding: 10px;
+  border: 2px solid #aaa;
+  vertical-align: top;
+  /* width: 14.29%; */
+  width: 11%;
+}
+.calendar__table tr {
+  height: 3em;
+}
+.calendar__weekday {
+  font-weight: bold;
+  color: black;
+  font-size: 1.2em;
+}
+.calendar__weekend {
+  width: 10px;
+}
+.calendar__day {
+  font-size: 1.3em;
+}
+/* To use or not */
+.calendar__othermonth .calendar__day{
+  opacity: .3;
+}
+td a {
+  color: white;
+}
 
-
-
-
-/* ===================== ... =========================== */
-/* ===================== ... =========================== */
+/* ===================== RESERVATIONS =========================== */
+.reservation {
+  height: calc(100vh - 350px);
+  border: 2px solid black;
+  padding: 1.5em 1em;
+}
+.reservation p {
+  font-size: 1.1em;
+  margin: 1.5em 0;
+}
+.reservationTitre {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+.info {
+  text-decoration: underline;
+  font-size: 1.2em;
+}
+.loginReserv {
+  font-style: italic;
+}
 /* ===================== ... =========================== */
 /* ===================== ... =========================== */
 /* ===================== ... =========================== */

@@ -50,17 +50,20 @@
             </colgroup>
             <?php 
             // CONSTRUCT THE TABLE
-            for ($i = 0; $i < 12; ++$i) {
+            // ROWS
+            for ($y = 0; $y < 12; ++$y) {
                 echo '<tr>', "\n";
-                for ($j = 0; $j < 8; ++$j) {
-                    if ($i == 0 && $j == 0)
+                // COLUMNS
+                for ($x = 0; $x < 8; ++$x) {
+
+                    if ($y == 0 && $x == 0)
                         echo '<th>Horaires</th>';
-                    elseif ($i == 0 && $j > 0) {
-                        $numbDay = $actWeek->mondaysDate + $j - 1;
-                        echo '<th>' . $actWeek->getWeekDays($j - 1) . ' ' . $numbDay .  '</th>';
+                    elseif ($y == 0 && $x > 0) {
+                        $numbDay = $actWeek->mondaysDate + $x - 1;
+                        echo '<th>' . $actWeek->getWeekDays($x - 1) . ' ' . $numbDay .  '</th>';
                     }
-                    elseif ($j == 0 && $i > 0) {
-                        $tempHour = 7 + $i;
+                    elseif ($x == 0 && $y > 0) {
+                        $tempHour = 7 + $y;
                         if ($tempHour < 10) {
                             $hour = '0' . $tempHour . ':00';
                         }
@@ -71,33 +74,48 @@
                     }
                     else {
                         // CREATE DATES & TIMES TO PUT IN REGARD OF ARRAY FROM DB
-                        $tempDay = $actWeek->mondaysDate + $j - 1;
+                        $tempDay = $actWeek->mondaysDate + $x - 1;
                         $fullDayDate = $actWeek->year . '-' . '0' .$actWeek->month . '-' . $tempDay;
                         $hourFull = $hour . ':00';
                         $fullDayDateTime = $fullDayDate . ' ' . $hourFull;
+                        // $activeRowSpan;
 
-                        echo '<td' ;
                         // rowspan -> nombre d'heures
+                        // echo '<td  rowspan=';
+                        // if (isset($activeRowSpan) && $activeRowSpan > 1) {
+                        //     // echo 'stop';
+                        //     // die();
+                        // }
+                        // else {
+                            echo '<td  rowspan=';
+                        // }
                         foreach ($events as $k => $event) {
-                            if ($k == $fullDayDateTime ) {
+                            if ($k == $fullDayDateTime) {
                                 $diff = new Events;
                                 $length = $diff->timeLength($event['debut'], $event['fin']);
+                                // $length > 1 ? : $leng
                                 if ($length > 1) {
-                                    // echo ' rowspan=' . $length;
+                                    $activeRowSpan = $length;
+                                    // echo $activeRowSpan;
+                                    // die();
+                                    echo $length;
                                     echo '>';
                                     // merde, ça décale les cases en-dessous
                                     // echo $length, '<br>';
-                                } else {
-                                    echo '>';
                                 }
+                                else {
+                                    echo 1;
+                                    echo '>';
+                                    // exit();
+                                }
+                                // echo '<td>';
                                 echo '(' . $length . ') ';
-                                echo $event['login'], '<br />';
+                                echo $event['login'], ',<br />';
                                 echo $event['titre'], '<br />';
                                 echo "<a href=\"reservation.php?id=" . $event['id'] . '">détails</a>';
                                 // echo '</td>';
                             }
                         }
-                        echo '>';
                         echo '</td>';
                     }
                 }
