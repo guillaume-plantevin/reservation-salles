@@ -69,13 +69,15 @@
                         $coordinate = $y . '-' . $x;
                         $cellLength = null;
 
+                        // SET RULES
                         if ($y == 0 && $x == 0)
                             echo '<th>Horaires</th>';
-
+                        // SET RULES: DAYS
                         elseif ($y == 0 && $x > 0) {
                             $daysNumber = $actWeek->mondaysDate + $x - 1;
                             echo '<th>' . $actWeek->getWeekDays($x - 1) . ' ' . $daysNumber .  '</th>';
                         }
+                        // SET RULES: HOURS
                         elseif ($y > 0 && $x == 0) {
                             $tempHour = 7 + $y;
                             if ($tempHour < 10) {
@@ -86,17 +88,21 @@
                             }
                             echo '<th>' . $hour . '</th>';
                         }
+                        // GET DATA
                         else {
+                            // FIND ROWSPAN, IF EXISTS
                             foreach($tableCell as $key => $value) {
                                 if ($coordinate === $key) {
                                     $cellLength = $value;
                                 }
                             }
+                            // FIND EVENT, IF EXISTS
                             foreach ($events as $k => $event) {
                                 if ($coordinate == $event['case']) {
                                     $currentEvent = $event;
                                 }
                             }
+                            // 
                             if (isset($cellLength) && $cellLength !== FALSE) {
                                 echo '<td rowspan="'. $cellLength . '"';
                                 echo ' style="color:white;text-shadow: 1px 1px 1px black; background-color:' . randomHsla() . '">';
@@ -106,7 +112,7 @@
                                 echo '</a>';
                                 echo '</td>';
                                 
-                                // logical part
+                                // LOGICAL PART: SET THE LOWER ROW(S) IN THE 'MIRROR' ARRAY
                                 $tempY = $y + 1;
                                 while ($cellLength > 1) {
                                     $tableCell[$tempY . '-' . $x] = FALSE;
@@ -115,9 +121,11 @@
                                 }
                             }
                             else {
+                                // BELOW CELL WITH ROWSPAN: ECHO NOTHING
                                 if (isset($tableCell[$coordinate])) {
                                     ;
                                 }
+                                // EMPTY CELLS
                                 else {
                                     echo '<td></td>';
                                 }
