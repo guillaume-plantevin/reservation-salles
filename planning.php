@@ -100,10 +100,10 @@
                             if (isset($cellLength) && $cellLength !== FALSE) {
                                 echo '<td rowspan="'. $cellLength . '"';
                                 echo ' style="color:white;text-shadow: 1px 1px 1px black; background-color:' . randomHsla() . '">';
-                                // echo '(' . $cellLength . ')', '<br>';
-                                echo $currentEvent['login'], ',<br />';
+                                echo "<a href=\"reservation.php?id=" . $currentEvent['id'] . '" class=table_link>';
+                                echo '<span class="name_creator"><strong>' . $currentEvent['login'] . '</strong></span>', ',<br />';
                                 echo $currentEvent['titre'], '<br />';
-                                echo "<a href=\"reservation.php?id=" . $currentEvent['id'] . '">détails</a>';
+                                echo '</a>';
                                 echo '</td>';
                                 
                                 // logical part
@@ -119,10 +119,7 @@
                                     ;
                                 }
                                 else {
-                                    echo '<td>';
-                                    // ERASE AFTER DEBUG
-                                    // echo '[' . $coordinate . ']';
-                                    echo '</td>';
+                                    echo '<td></td>';
                                 }
                             }
                         }

@@ -7,20 +7,19 @@
     session_start();
     
     // DEBUG
-    $one = '<br />';
-    $two = $one . $one;
+    // $one = '<br />';
+    // $two = $one . $one;
 
     require_once('pdo.php');
     require_once('functions/functions.php');
 
-    $title = 'réservation: formulaire';
+    $title = 'Formulaire de réservation';
 
     // DEBUG
     print_r_pre($_SESSION, '19: $_SESSION:');
     echo breakingLine();
     var_dump_pre($_POST, '21: $_POST:');
     echo breakingLine();
-
 
     if (isset($_POST['cancel'])) {
         header('Location: deconnexion.php');
@@ -138,6 +137,10 @@
                 $dateStart = $_POST['date'] . ' ' . $_POST['startTime'] . ':00';
                 $dateEnd = $_POST['date'] . ' ' . $_POST['endTime'] . ':00';
 
+                
+                $events = new Events();
+                $eventsForDay = $events->
+                
                 $sql = "SELECT * FROM reservations  
                         WHERE debut BETWEEN :debut AND :fin";
                 

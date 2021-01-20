@@ -58,6 +58,12 @@ table, td, th {
   border: 1px solid black;
   padding: 2em
 }
+.name_creator {
+  font-size: 1.2em;
+}
+.table_link {
+  text-decoration: none;
+}
 td {
   border-radius: 0 2em;
   padding: 1em;
@@ -96,8 +102,8 @@ td a {
   color: white;
 }
 td a:hover {
-  color: rgb(255, 0, 0);
-  cursor: help;
+  color: white;
+  text-decoration: underline;
 }
 
 /* ===================== RESERVATIONS =========================== */

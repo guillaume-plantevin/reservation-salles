@@ -93,9 +93,9 @@
          */
         public function previousWeek(): Week {
             $tempDate = new DateTimeImmutable($this->currentDate);
+
             $dayName = $tempDate->format('l');
             $tempDate2 = $tempDate->modify('previous ' . $dayName);
-
             $day = $tempDate2->format('j');
             $month = $tempDate2->format('n');
             $year = $tempDate2->format('Y');
