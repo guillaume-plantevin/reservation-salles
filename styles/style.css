@@ -10,30 +10,18 @@ header a {
 	padding: .5em .7em;
 }
 header a:hover {
-	/* text-decoration: none; */
 	background-color: rgba(0, 0, 0, 0.137);
-	/* color:red; */
-	/* padding: .5em .7em; */
 }
 #logo {
   height: 9em;
   background: center no-repeat url('../images/logo_crop.jpg');
   background-size: contain;
-  /* background-color: red; */
 }
 .nav {
   width: 100vh;
 }
 /* ===================== FOOTER =========================== */
 .footer {
-  /* pose un problème */
-  /* position: fixed;
-  left: 0;
-  bottom: 0;
-  right: 0; */
-  /* width: 100%; */
-  /* background: rgb(255, 197, 146); */
-  /* color: rgb(2, 2, 2); */
   text-align: center;
 }
 .footer p {
@@ -48,7 +36,6 @@ label {
 	margin-top: 1em;
 }
 input[type=submit] {
-  /* color:red; */
   margin: 1em .5em;
 }
 /* ===================== MSG FOR USERS =========================== */
@@ -71,10 +58,15 @@ table, td, th {
   border: 1px solid black;
   padding: 2em
 }
-col {
-  width: 150px;
-  /* NE FONCTIONNE PAS, FAIRE UNE RECHERCHE DANS LA DOCUMENTATION */
-  height: 50px;
+.name_creator {
+  font-size: 1.2em;
+}
+.table_link {
+  text-decoration: none;
+}
+td {
+  border-radius: 0 2em;
+  padding: 1em;
 }
 .calendar__nav {
   height: 4em;
@@ -82,22 +74,14 @@ col {
   justify-content: space-evenly;
   align-items: baseline;
 }
-/* h1 {
-  color: lightseagreen;
-} */
-/* table th td{
-  border: 2px solid rgb(122, 122, 122);
-} */
 .calendar__table {
   width: 100%;
-  /* height: calc(100vh - 120px); */
   height: 110vh;
 }   
 .calendar__table th, .calendar__table td {
   padding: 10px;
   border: 2px solid #aaa;
   vertical-align: top;
-  /* width: 14.29%; */
   width: 11%;
 }
 .calendar__table tr {
@@ -114,12 +98,12 @@ col {
 .calendar__day {
   font-size: 1.3em;
 }
-/* To use or not */
-.calendar__othermonth .calendar__day{
-  opacity: .3;
-}
 td a {
   color: white;
+}
+td a:hover {
+  color: white;
+  text-decoration: underline;
 }
 
 /* ===================== RESERVATIONS =========================== */

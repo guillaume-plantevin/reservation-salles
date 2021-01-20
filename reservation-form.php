@@ -7,20 +7,20 @@
     session_start();
     
     // DEBUG
-    $one = '<br />';
-    $two = $one . $one;
+    // $one = '<br />';
+    // $two = $one . $one;
 
     require_once('pdo.php');
     require_once('functions/functions.php');
+    require_once('class/events.php');
 
-    $title = 'réservation: formulaire';
+    $title = 'Formulaire de réservation';
 
     // DEBUG
     print_r_pre($_SESSION, '19: $_SESSION:');
     echo breakingLine();
     var_dump_pre($_POST, '21: $_POST:');
     echo breakingLine();
-
 
     if (isset($_POST['cancel'])) {
         header('Location: deconnexion.php');
@@ -133,32 +133,50 @@
             // OK, CONTINUE 
             else {
                 /**
+                 * ON VERRA!
                  * utiliser des timestamps, ça devrait être plus simple de savoir
                  */
                 $dateStart = $_POST['date'] . ' ' . $_POST['startTime'] . ':00';
                 $dateEnd = $_POST['date'] . ' ' . $_POST['endTime'] . ':00';
+                // var_dump_pre($_POST['date'], '$_POST[date]');
 
-                $sql = "SELECT * FROM reservations  
-                        WHERE debut BETWEEN :debut AND :fin";
-                
-                echo $sql;
-                
-                $verify = $pdo->prepare($sql);
-                $verify->execute([
-                    ':debut' => $dateStart,
-                    ':fin' => $dateEnd
-                ]);
+                $start = new DateTime($_POST['date'], new DateTimeZone('Europe/Paris'));
+                $end = (clone $start)->modify('+1 day - 1 second');
 
-                $results = $verify->fetch(PDO::FETCH_ASSOC);
+                $events = new Events();
+                $eventsForDay = $events->getEventsBetweenByDay($start, $end);
 
-                // DEBUG
-                var_dump_pre($results, '$results');
-                // die();
-                if (!empty($results)) {
-                    $_SESSION['error'] = 'Il existe déjà une réservation dans le planning entre votre heure de début et votre heure de fin.';
-                    header('Location: reservation-form.php');
-                    return;
+                // print_r_pre($eventsForDay, '$eventsForDay');
+                // le jour ne sert à rien donc il faut que j'ai un array juste indexé par un index
+
+                foreach ($eventsForDay as $k => $v) {
+                    print_r_pre($k, '$k');
+                    print_r_pre($v, '$v');
                 }
+                if (!empty($eventsForDay)) {
+                    echo 'pas vide<br> ';
+
+                }
+
+
+                
+                // $sql = "SELECT * FROM reservations WHERE debut BETWEEN :debut AND :fin";
+                // echo $sql;
+                // $verify = $pdo->prepare($sql);
+                // $verify->execute([
+                //     ':debut' => $dateStart,
+                //     ':fin' => $dateEnd
+                // ]);
+                // $results = $verify->fetch(PDO::FETCH_ASSOC);
+                // DEBUG
+                // var_dump_pre($results, '$results');
+                // if (!empty($results)) {
+                //     $_SESSION['error'] = 'Il existe déjà une réservation dans le planning entre votre heure de début et votre heure de fin.';
+                //     header('Location: reservation-form.php');
+                //     return;
+                // }
+
+
 
                 // $insert = "INSERT INTO reservations 
                 //     (titre, description, debut, fin, id_utilisateur) 

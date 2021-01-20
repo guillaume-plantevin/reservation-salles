@@ -11,7 +11,6 @@
             ]);
         }
 
-
         /**
          * Retourne un array avec tous les événements compris entre deux dates
          * UTILISATION DE debut pour les sélectionner
@@ -26,13 +25,16 @@
                     WHERE debut BETWEEN '{$start->format('Y-m-d 08:00:00')}' AND '{$end->format('Y-m-d 19:00:00')}'
                     AND utilisateurs.id = reservations.id_utilisateur
             ";
-            // var_dump_pre($sql, '$sql');
             $stmt = $this->pdo->query($sql);
+
             $results = $stmt->fetchAll();
+
             return $results;
         }
 
         /**
+         * ON GARDE??????
+         * 
          * Retourne un array avec tous les événements compris entre deux dates, INDEXÉ PAR JOUR
          * UTILISATION DE debut pour les sélectionner
          * @param DateTime $start
@@ -42,16 +44,16 @@
         public function getEventsBetweenByDay(DateTime $start, DateTime $end): array {
             $events = $this->getEventsBetween($start, $end);
             $days = [];
-            // var_dump_pre($events, 'events[38]: $events');
             foreach ($events as $event) {
                 $date = explode(' ', $event['debut'])[0];
-                // var_dump($date);
                 if (!isset($days[$date])) {
                     $days[$date] = [$event];
-                } else {
+                }
+                else {
                     $days[$date][] = [$event];
                 }
             }
+
             return $days;
         }
 
@@ -65,13 +67,11 @@
         public function getEventsBetweenByDayTime(DateTime $start, DateTime $end): array {
             $events = $this->getEventsBetween($start, $end);
             $days = [];
+
             foreach ($events as $event) {
                 $day[$event['debut']] = $event;
-
                 $diff = new Events;
                 $length = $diff->timeLength($event['debut'], $event['fin']);
-
-                // <rajout> pour la presentation de <table>
                 $day[$event['debut']]['length'] = $length;
                 $dateStart = new DateTime($event['debut']);
                 $dateDay = $dateStart->format('N');
@@ -79,16 +79,8 @@
                 $case = ($timeHour - 7) . '-' . $dateDay;
                 $day[$event['debut']]['case'] = $case;
                 $lengthEvents[$case] = $length;
-
-                // $tempY = $timeHour + 1;
-                // logical part
-                // while ($length > 1) {
-                //     $this->lengthEvents[$tempY . '-' . $dateDay] = FALSE;
-                //     $tempY++;
-                //     $length--;
-                // }
-                // </rajout>
             }
+
             return $day;
         }
 
@@ -103,28 +95,31 @@
             $tempTwo = new DateTime($end);
             
             $length = date_diff($tempOne, $tempTwo);
+
             return $length->h;
         }
 
         /**
-         * retourne toute
+         * 
+         * retourne toutes les informations sur un événement choisi
          * @param int $id
          */
-        public function getEvent(int $id): array {
-            $sql = "SELECT 
-                    reservations.id, reservations.titre, reservations.description, reservations.debut, reservations.fin, utilisateurs.login 
-                    FROM reservations JOIN utilisateurs 
-                    WHERE reservations.id = :id";
-            echo $sql;
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([':id' => $id]);
-            $results = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $results;
-        }
+        // public function getEvent(int $id): array {
+        //     $sql = "SELECT 
+        //             reservations.id, reservations.titre, reservations.description, reservations.debut, reservations.fin, utilisateurs.login 
+        //             FROM reservations JOIN utilisateurs 
+        //             WHERE reservations.id = :id";
+        //     $stmt = $this->pdo->prepare($sql);
+        //     $stmt->execute([':id' => $id]);
+        //     $results = $stmt->fetch(PDO::FETCH_ASSOC);
+        //     return $results;
+        // }
 
         /**
-         * retourne toute
+         * pour la page reservation.php
+         * retourne toutes les informations  sous la forme d'un array associatif sur un événement choisi
          * @param int $id
+         * @return array 
          */
         public function getEventById(int $id): array {
             $sql = "SELECT 
@@ -135,6 +130,7 @@
 
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([':id' => $id]);
+
             $results = $stmt->fetch(PDO::FETCH_ASSOC);
 
             return $results;
