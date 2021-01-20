@@ -33,6 +33,8 @@
         }
 
         /**
+         * ON GARDE??????
+         * 
          * Retourne un array avec tous les événements compris entre deux dates, INDEXÉ PAR JOUR
          * UTILISATION DE debut pour les sélectionner
          * @param DateTime $start
@@ -44,10 +46,9 @@
             $days = [];
             foreach ($events as $event) {
                 $date = explode(' ', $event['debut'])[0];
-
                 if (!isset($days[$date])) {
                     $days[$date] = [$event];
-                } 
+                }
                 else {
                     $days[$date][] = [$event];
                 }
