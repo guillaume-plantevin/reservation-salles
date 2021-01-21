@@ -5,10 +5,6 @@
             titre, description, date de début, date de fin.
     */
     session_start();
-    
-    // DEBUG
-    // $one = '<br />';
-    // $two = $one . $one;
 
     require_once('pdo.php');
     require_once('functions/functions.php');
@@ -17,10 +13,10 @@
     $title = 'Formulaire de réservation';
 
     // DEBUG
-    print_r_pre($_SESSION, '19: $_SESSION:');
-    echo breakingLine();
-    var_dump_pre($_POST, '21: $_POST:');
-    echo breakingLine();
+    // print_r_pre($_SESSION, '19: $_SESSION:');
+    // echo breakingLine();
+    // var_dump_pre($_POST, '21: $_POST:');
+    // echo breakingLine();
 
     if (isset($_POST['cancel'])) {
         header('Location: deconnexion.php');
@@ -247,9 +243,7 @@
             <?php
                 endif;
             ?>
-        
         </main>
         <?php require_once('templates/footer.php') ?>
-        
     </body>
 </html>
