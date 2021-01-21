@@ -105,7 +105,7 @@
          * @param DateTime $end
          * @return array
          */
-        public function getEventsBetweenByDayTime(DateTime $start, DateTime $end): array {
+        public function getEventsBetweenByDayTime(DateTime $start, DateTime $end) {
             $events = $this->getEventsBetween($start, $end);
             $days = [];
 

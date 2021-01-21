@@ -32,7 +32,12 @@
     $startingDayWeek = $actWeek->getStartingDay();
     $end = (clone $startingDayWeek)->modify('+ 5 days - 1 second');
 
-    $events = $eventsFromDB->getEventsBetweenByDayTime($startingDayWeek, $end);
+    try {
+        $events = $eventsFromDB->getEventsBetweenByDayTime($startingDayWeek, $end);
+    } catch (Exception $e) {
+        echo 'pas de retour: ',  $e->getMessage(), "\n";
+    }
+
     // DEBUG
     // print_r_pre($events, '[34]-> $events');
     foreach ($events as $k => $event) {
