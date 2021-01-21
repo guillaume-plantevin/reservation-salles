@@ -132,71 +132,62 @@
             }
             // OK, CONTINUE 
             else {
-                /**
-                 * ON VERRA!
-                 * utiliser des timestamps, ça devrait être plus simple de savoir
-                 */
                 $dateStart = $_POST['date'] . ' ' . $_POST['startTime'] . ':00';
                 $dateEnd = $_POST['date'] . ' ' . $_POST['endTime'] . ':00';
-                // var_dump_pre($_POST['date'], '$_POST[date]');
 
                 $start = new DateTime($_POST['date'], new DateTimeZone('Europe/Paris'));
                 $end = (clone $start)->modify('+1 day - 1 second');
 
                 $events = new Events();
-                $eventsForDay = $events->getEventsBetweenByDay($start, $end);
+                $eventsForDay = $events->getEventsForDay($start, $end);
 
-                // print_r_pre($eventsForDay, '$eventsForDay');
-                // le jour ne sert à rien donc il faut que j'ai un array juste indexé par un index
-
-                foreach ($eventsForDay as $k => $v) {
-                    print_r_pre($k, '$k');
-                    print_r_pre($v, '$v');
-                }
                 if (!empty($eventsForDay)) {
-                    echo 'NOT EMPTY<br> ';
+                    $bookingStart = strtotime($dateStart);
+                    $bookingEnd = strtotime($dateEnd);
 
+                    foreach ($eventsForDay as $events) {
+                        $eventDateStart = strtotime($events['debut']);
+                        $eventDateEnd = strtotime($events['fin'] . '- 1 second');
+
+                        // STARTING BETWEEN START AND END 
+                        if ($bookingStart > $eventDateStart && $bookingStart < $eventDateEnd) {
+                            $_SESSION['error'] = '(1)Votre réservation ne peut pas être validée car une autre réservation existe déjà, commençant avant la votre dans votre créneau de temps.';
+                            header('Location: reservation-form.php');
+                            return;
+                        }
+                        elseif ($bookingEnd > $eventDateStart && $bookingEnd < $eventDateEnd) {
+                            $_SESSION['error'] = '(2)Votre réservation ne peut pas être validée car une autre réservation existe déjà commençant dans le créneau que vous avez choisi.';
+                            header('Location: reservation-form.php');
+                            return;
+                        }
+                        elseif ($bookingStart > $eventDateStart && $bookingEnd < $eventDateEnd) {
+                            $_SESSION['error'] = '(3)Votre réservation ne peut pas être validée car une autre réservation plus longue existe déjà dans votre créneau.';
+                            header('Location: reservation-form.php');
+                            return;
+                        }
+                        elseif ($bookingStart < $eventDateStart && $bookingEnd > $eventDateEnd) {
+                            $_SESSION['error'] = '(4)Votre réservation ne peut pas être validée car une autre réservation plus longue existe déjà dans votre créneau.';
+                            header('Location: reservation-form.php');
+                            return;
+                        }
+                    }
                 }
+                // VALIDATE BOOKING IF REACHING THESE LINES
+                $insert = "INSERT INTO reservations 
+                (titre, description, debut, fin, id_utilisateur) 
+                VALUES (:title, :description, :debut, :fin, :id_user)";
 
+                $stmt = $pdo->prepare($insert);
 
+                $stmt->execute([
+                ':title'=> htmlentities($_POST['title']),
+                ':description'=> htmlentities($_POST['description']), 
+                ':debut'=> $dateStart, 
+                ':fin'=> $dateEnd, 
+                ':id_user'=> $_SESSION['id']
+                ]);
                 
-                // $sql = "SELECT * FROM reservations WHERE debut BETWEEN :debut AND :fin";
-                // echo $sql;
-                // $verify = $pdo->prepare($sql);
-                // $verify->execute([
-                //     ':debut' => $dateStart,
-                //     ':fin' => $dateEnd
-                // ]);
-                // $results = $verify->fetch(PDO::FETCH_ASSOC);
-                // DEBUG
-                // var_dump_pre($results, '$results');
-                // if (!empty($results)) {
-                //     $_SESSION['error'] = 'Il existe déjà une réservation dans le planning entre votre heure de début et votre heure de fin.';
-                //     header('Location: reservation-form.php');
-                //     return;
-                // }
-
-
-
-                // $insert = "INSERT INTO reservations 
-                //     (titre, description, debut, fin, id_utilisateur) 
-                //     VALUES (:title, :description, :debut, :fin, :id_user)";
-
-                // // DEBUG
-                // echo $insert . '<br>';
-
-                // $stmt = $pdo->prepare($insert);
-
-                // $stmt->execute([
-                //     ':title'=> htmlentities($_POST['title']),
-                //     ':description'=> htmlentities($_POST['description']), 
-                //     ':debut'=> $dateStart, 
-                //     ':fin'=> $dateEnd, 
-                //     ':id_user'=> $_SESSION['id']
-                // ]);
-                    
-    
-                // $_SESSION['success']= 'Votre réservation a bien été enregistré. Vous pouvez dès maintenant la voir sur le planning.';
+                $_SESSION['success']= 'Votre réservation a bien été enregistré. Vous pouvez dès maintenant la voir sur le planning.';
             }
         }
     }
