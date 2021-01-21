@@ -154,7 +154,7 @@
                     print_r_pre($v, '$v');
                 }
                 if (!empty($eventsForDay)) {
-                    echo 'pas vide<br> ';
+                    echo 'NOT EMPTY<br> ';
 
                 }
 
@@ -182,8 +182,8 @@
                 //     (titre, description, debut, fin, id_utilisateur) 
                 //     VALUES (:title, :description, :debut, :fin, :id_user)";
 
-                // DEBUG
-                // echo $insert. '<br>';
+                // // DEBUG
+                // echo $insert . '<br>';
 
                 // $stmt = $pdo->prepare($insert);
 
