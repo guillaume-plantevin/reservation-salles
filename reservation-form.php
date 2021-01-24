@@ -1,9 +1,4 @@
 <?php
-    /*
-        Un formulaire de réservation de salle (reservation-form.php)
-        Ce formulaire contient les informations suivantes : 
-            titre, description, date de début, date de fin.
-    */
     session_start();
 
     require_once('pdo.php');
@@ -11,12 +6,6 @@
     require_once('class/events.php');
 
     $title = 'Formulaire de réservation';
-
-    // DEBUG
-    // print_r_pre($_SESSION, '19: $_SESSION:');
-    // echo breakingLine();
-    // var_dump_pre($_POST, '21: $_POST:');
-    // echo breakingLine();
 
     if (isset($_POST['cancel'])) {
         header('Location: deconnexion.php');
@@ -60,7 +49,6 @@
             header('Location: reservation-form.php');
             return;
         }
-        // > 65,535 chars
         // TOO LONG DESCRIPTION
         elseif (strlen($_POST['description']) > 65535) {
             $_SESSION['error'] = 'Votre description est trop longue.';
@@ -89,12 +77,10 @@
                 return;
             }
             // CHECK DATE IS WELL FORMATED
-            // $dateMYD = $dateArray[1] . $dateArray[2] . $dateArray[0]; 
             elseif (!checkdate($dateArray[1], $dateArray[2], $dateArray[0])) {
                 $_SESSION['error'] = 'Il y  erreur dans le formatage de votre jour de réservation.';
                 header('Location: reservation-form.php');
                 return;
-
             }
             // IF ENDING BEFORE STARTING
             elseif ($endTimeArray[0] <= $startTimeArray[0]) {
@@ -147,22 +133,22 @@
 
                         // STARTING BETWEEN START AND END 
                         if ($bookingStart > $eventDateStart && $bookingStart < $eventDateEnd) {
-                            $_SESSION['error'] = '(1)Votre réservation ne peut pas être validée car une autre réservation existe déjà, commençant avant la votre dans votre créneau de temps.';
+                            $_SESSION['error'] = 'Votre réservation ne peut pas être validée car une autre réservation existe déjà, commençant avant la votre dans votre créneau de temps.';
                             header('Location: reservation-form.php');
                             return;
                         }
                         elseif ($bookingEnd > $eventDateStart && $bookingEnd < $eventDateEnd) {
-                            $_SESSION['error'] = '(2)Votre réservation ne peut pas être validée car une autre réservation existe déjà commençant dans le créneau que vous avez choisi.';
+                            $_SESSION['error'] = 'Votre réservation ne peut pas être validée car une autre réservation existe déjà commençant dans le créneau que vous avez choisi.';
                             header('Location: reservation-form.php');
                             return;
                         }
                         elseif ($bookingStart > $eventDateStart && $bookingEnd < $eventDateEnd) {
-                            $_SESSION['error'] = '(3)Votre réservation ne peut pas être validée car une autre réservation plus longue existe déjà dans votre créneau.';
+                            $_SESSION['error'] = 'Votre réservation ne peut pas être validée car une autre réservation plus longue existe déjà dans votre créneau.';
                             header('Location: reservation-form.php');
                             return;
                         }
                         elseif ($bookingStart < $eventDateStart && $bookingEnd > $eventDateEnd) {
-                            $_SESSION['error'] = '(4)Votre réservation ne peut pas être validée car une autre réservation plus longue existe déjà dans votre créneau.';
+                            $_SESSION['error'] = 'Votre réservation ne peut pas être validée car une autre réservation plus longue existe déjà dans votre créneau.';
                             header('Location: reservation-form.php');
                             return;
                         }
@@ -208,7 +194,6 @@
                     echo '<p class="error">Cette partie du site où vous pourrez réaliser une réservation de salle, ne sera visible qu\'une fois connecté</p>';
                 else :
             ?>
-            <!-- à envoyer en POST, car le descriptif peut-être long... -->
             <p>Pour pouvoir faire une réservation, vous devez respecter quelques consignes: </p>
             <ul>
                 <li>Vous ne pouvez pas antidater une réservation,</li>
