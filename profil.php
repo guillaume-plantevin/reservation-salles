@@ -1,18 +1,10 @@
 <?php
-    /*
-        Une page permettant de modifier son profil (profil.php) :
-        Cette page possède un formulaire permettant 
-        à l’utilisateur de modifier son login et son mot de passe.
-    */
     session_start();
 
     require_once('pdo.php');
     require_once('functions/functions.php');
 
     date_default_timezone_set ('Europe/Paris');
-    
-    // DEBUG
-    // var_dump_pre($_SESSION, '$_SESSION');
 
     $title = 'profil';
 
